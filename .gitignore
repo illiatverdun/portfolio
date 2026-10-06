@@ -1,0 +1,5 @@
+# Raw sources (videos, sounds) — web versions live in assets/
+Claude outputs/
+index.old.html
+.DS_Store
+Thumbs.db

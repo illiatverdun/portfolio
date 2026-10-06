@@ -1,0 +1,1570 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Illia Tverdun — Product Designer</title>
+<meta name="description" content="Illia Tverdun is a Warsaw-based product designer working on complex insurance and real estate products.">
+<link rel="icon" href="assets/avatar.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ───────────────────────── Design tokens (from Figma) ───────────────────────── */
+:root {
+  --bg: #f9f9f9;
+  --surface: #ffffff;
+  --surface-raised: #fcfcfc;
+  --surface-muted: #f0f0f0;
+  --text: #2e2e2e;
+  --text-2: #636363;
+  --text-3: #999898;
+  --inverse: #2e2e2e;
+  --on-inverse: #f9f9f9;
+  --border: #f2f2f2;
+  --focus: #0099ff;
+
+  --container: 748px;
+  --col: 478px;          /* content column = container − 270px = segmented control width */
+  --gutter: 24px;
+  --r-card: 20px;
+  --r-dialog: 32px;
+
+  --shadow-modal: 0 24px 48px rgba(0,0,0,.18), 0 2px 6px rgba(0,0,0,.06);
+  --shadow-pill: 0 1px 2px rgba(0,0,0,.06), 0 0 0 .5px rgba(0,0,0,.04);
+
+  /* ── transitions.dev motion tokens ── */
+  --duration-stagger: 40ms;
+  --duration-micro: 80ms;
+  --duration-quick: 150ms;
+  --duration-fast: 250ms;
+  --duration-medium: 350ms;
+  --duration-slow: 400ms;
+  --duration-very-slow: 500ms;
+  --ease-smooth-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: ease-in-out;
+  --ease-bounce: cubic-bezier(0.34, 1.36, 0.64, 1);
+
+  /* Card resize */
+  --resize-dur: 300ms;
+  --resize-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Text states swap */
+  --text-swap-dur: 150ms;
+  --text-swap-translate-y: 4px;
+  --text-swap-blur: 2px;
+  --text-swap-ease: ease-in-out;
+  /* Modal open / close */
+  --modal-open-dur: 250ms;
+  --modal-close-dur: 150ms;
+  --modal-scale: 0.96;
+  --modal-scale-close: 0.96;
+  --modal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Page side-by-side */
+  --page-slide-dur: 250ms;
+  --page-fade-dur: 250ms;
+  --page-slide-distance: 8px;
+  --page-blur: 3px;
+  --page-slide-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --page-fade-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Icon swap */
+  --icon-swap-dur: 250ms;
+  --icon-swap-blur: 2px;
+  --icon-swap-start-scale: 0.25;
+  --icon-swap-ease: ease-in-out;
+  /* Skeleton reveal (used for showreel slides) */
+  --reveal-dur: 400ms;
+  --reveal-blur: 2px;
+  --reveal-ease: ease-in-out;
+  /* Tabs sliding */
+  --tabs-dur: 250ms;
+  --tabs-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --tabs-text-muted: #999898;
+  --tabs-text-active: #2e2e2e;
+  --tabs-text-hover: #636363;
+  --kbd-bg: #f0f0f0;
+  --kbd-border: #e3e3e3;
+  --tabs-bar-bg: #f0f0f0;
+  --tabs-pill-bg: #fcfcfc;
+  /* Texts reveal */
+  --stagger-dur: 500ms;
+  --stagger-distance: 12px;
+  --stagger-stagger: 40ms;
+  --stagger-blur: 3px;
+  --stagger-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Plus to menu morph (Get in touch → popover) */
+  --morph-open-dur: 350ms;
+  --morph-close-dur: 250ms;
+  --morph-ease: cubic-bezier(0.34, 1.25, 0.64, 1);
+  --morph-close-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --morph-r-closed: 17px;
+  --morph-r-open: 20px;
+  --morph-fade-dur: 200ms;
+  --morph-slide: 40px;
+  --morph-scale: 0.97;
+  --morph-blur: 2px;
+  /* Learn more hover */
+  --learn-shift: 2px;
+  --learn-in: 350ms;
+  --learn-out: 350ms;
+  --learn-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ───────────────────────── Base ───────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scrollbar-gutter: stable; -webkit-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 400 16px/1.5 "Inter", system-ui, -apple-system, sans-serif;
+  font-feature-settings: "cv11", "ss01";
+  overflow-x: hidden;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 8px; }
+svg { display: block; flex: none; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.container {
+  width: 100%;
+  max-width: calc(var(--container) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.shell { min-height: 100vh; display: flex; flex-direction: column; padding-top: 44px; }
+
+.label { margin: 0 0 8px; font-size: 12px; line-height: 1.25; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; color: var(--text-3); }
+.body { margin: 0; color: var(--text-2); }
+.strong { color: var(--text); }
+.muted { color: var(--text-3); }
+
+/* ───────────────────────── Header ───────────────────────── */
+.header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; position: relative; z-index: 30; }
+.profile { display: flex; align-items: center; gap: 12px; }
+.profile__photo { position: relative; width: 48px; height: 48px; flex: none; border-radius: 12px; overflow: hidden; display: grid; transition: transform var(--duration-fast) var(--ease-bounce); }
+.profile__photo img { grid-area: 1 / 1; width: 100%; height: 100%; transition: opacity var(--icon-swap-dur) var(--icon-swap-ease), filter var(--icon-swap-dur) var(--icon-swap-ease), transform var(--icon-swap-dur) var(--icon-swap-ease); }
+.profile__photo img + img { opacity: 0; filter: blur(var(--icon-swap-blur)); transform: scale(1.06); }
+@media (hover: hover) {
+  .profile:hover .profile__photo img:first-child { opacity: 0; filter: blur(var(--icon-swap-blur)); transform: scale(.96); }
+  .profile:hover .profile__photo img + img { opacity: 1; filter: blur(0); transform: scale(1); }
+  .profile:hover .profile__photo { transform: rotate(-3deg); }
+}
+.profile:active .profile__photo { transform: scale(.94); }
+.profile__name { margin: 0; white-space: nowrap; font-size: 20px; line-height: 1.3; font-weight: 400; color: var(--text); }
+.profile__role { margin: 0; white-space: nowrap; font-size: 14px; letter-spacing: .01em; color: var(--text-3); }
+.header__actions { display: flex; align-items: center; gap: 12px; }
+
+.icon-btn {
+  width: 34px; height: 34px; border-radius: 999px;
+  display: grid; place-items: center; color: var(--text-3);
+  transition: background-color var(--duration-quick) ease-out, color var(--duration-quick) ease-out;
+}
+.icon-btn:hover { background: var(--surface-muted); color: var(--text); }
+
+/* Icon swap — transitions.dev #09 */
+.t-icon-swap { position: relative; display: inline-grid; }
+.t-icon-swap .t-icon {
+  grid-area: 1 / 1;
+  transition:
+    opacity   var(--icon-swap-dur) var(--icon-swap-ease),
+    filter    var(--icon-swap-dur) var(--icon-swap-ease),
+    transform var(--icon-swap-dur) var(--icon-swap-ease);
+  will-change: opacity, filter, transform;
+}
+.t-icon-swap[data-state="a"] .t-icon[data-icon="a"],
+.t-icon-swap[data-state="b"] .t-icon[data-icon="b"] { opacity: 1; filter: blur(0); transform: scale(1); }
+.t-icon-swap[data-state="a"] .t-icon[data-icon="b"],
+.t-icon-swap[data-state="b"] .t-icon[data-icon="a"] { opacity: 0; filter: blur(var(--icon-swap-blur)); transform: scale(var(--icon-swap-start-scale)); }
+
+/* ── Get in touch → popover (transitions.dev #20 Plus → menu morph) ── */
+.contact-slot { position: relative; width: var(--closed-w, 138px); height: 34px; }
+.t-morph {
+  position: absolute; top: 0; right: 0;
+  width: var(--closed-w, 138px);
+  height: 34px;
+  border-radius: var(--morph-r-closed);
+  overflow: hidden;
+  background: var(--inverse);
+  box-shadow: 0 0 0 rgba(0,0,0,0);
+  transition:
+    width var(--morph-close-dur) var(--morph-close-ease),
+    height var(--morph-close-dur) var(--morph-close-ease),
+    border-radius var(--morph-close-dur) var(--morph-close-ease),
+    background-color var(--morph-close-dur) var(--morph-close-ease),
+    box-shadow var(--morph-close-dur) var(--morph-close-ease);
+}
+.t-morph[data-open="true"] {
+  width: var(--open-w, 400px);
+  height: var(--open-h, 194px);
+  border-radius: var(--morph-r-open);
+  background: var(--surface);
+  box-shadow: var(--shadow-modal);
+  transition:
+    width var(--morph-open-dur) var(--morph-ease),
+    height var(--morph-open-dur) var(--morph-ease),
+    border-radius var(--morph-open-dur) var(--morph-ease),
+    background-color var(--morph-fade-dur) var(--morph-close-ease),
+    box-shadow var(--morph-open-dur) var(--morph-close-ease);
+}
+.t-morph-plus {
+  position: absolute; inset: 0 0 auto auto;
+  height: 34px; display: flex; align-items: center;
+  color: var(--on-inverse); font-size: 14px; font-weight: 500; letter-spacing: .01em; white-space: nowrap;
+  transition:
+    opacity var(--morph-fade-dur) var(--morph-close-ease),
+    transform var(--morph-open-dur) var(--morph-close-ease),
+    filter var(--morph-fade-dur) var(--morph-close-ease);
+}
+.t-morph-plus__label { padding: 0 12px; }
+.t-morph-plus__icon { display: none; width: 34px; height: 34px; place-items: center; }
+.t-morph-plus__chev { height: 34px; width: 32px; display: grid; place-items: center; border-left: 1px solid rgba(255,255,255,.14); }
+.t-morph-plus svg { transition: transform var(--morph-open-dur) var(--morph-close-ease); }
+.t-morph-plus:hover .t-morph-plus__chev svg { transform: translateX(2px); }
+.t-morph[data-open="true"] .t-morph-plus {
+  opacity: 0;
+  transform: translateX(calc(-1 * var(--morph-slide)));
+  filter: blur(var(--morph-blur));
+  pointer-events: none;
+}
+.t-morph-menu {
+  position: absolute; top: 0; right: 0;
+  width: var(--open-w, 400px);
+  padding: 16px;
+  opacity: 0;
+  transform: translateX(var(--morph-slide)) scale(var(--morph-scale));
+  transform-origin: top right;
+  filter: blur(var(--morph-blur));
+  pointer-events: none;
+  transition:
+    opacity var(--morph-fade-dur) var(--morph-close-ease),
+    transform var(--morph-open-dur) var(--morph-close-ease),
+    filter var(--morph-fade-dur) var(--morph-close-ease);
+}
+.t-morph[data-open="true"] .t-morph-menu { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); pointer-events: auto; }
+
+.pop__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.pop__title { margin: 0; font-weight: 500; }
+.pop__close { width: 32px; height: 32px; border-radius: 999px; display: grid; place-items: center; background: var(--surface-muted); color: var(--text-2); transition: background-color var(--duration-quick) ease-out, color var(--duration-quick) ease-out; }
+.pop__close:hover { background: #e7e7e7; color: var(--text); }
+.pop__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0; }
+.pop__row + .pop__row { margin-top: 16px; }
+.pop__row p { margin: 0; }
+.pop__row .muted { font-size: 16px; }
+.seg-btns { display: inline-flex; border-radius: 999px; box-shadow: inset 0 0 0 1px #e6e6e6; background: var(--surface); }
+.seg-btns > * { height: 32px; min-width: 36px; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; font-weight: 500; color: var(--text); transition: background-color var(--duration-quick) ease-out; }
+.seg-btns > * + * { border-left: 1px solid #e6e6e6; }
+.seg-btns > *:first-child { border-radius: 999px 0 0 999px; }
+.seg-btns > *:last-child { border-radius: 0 999px 999px 0; }
+.seg-btns > *:only-child { border-radius: 999px; }
+.seg-btns > *:hover { background: var(--bg); }
+.seg-btns .li { color: #0a66c2; }
+
+/* Text states swap — transitions.dev #04 */
+.t-text-swap {
+  display: inline-block;
+  transform: translateY(0); filter: blur(0); opacity: 1;
+  transition:
+    transform var(--text-swap-dur) var(--text-swap-ease),
+    filter    var(--text-swap-dur) var(--text-swap-ease),
+    opacity   var(--text-swap-dur) var(--text-swap-ease);
+  will-change: transform, filter, opacity;
+}
+.t-text-swap.is-exit { transform: translateY(calc(var(--text-swap-translate-y) * -1)); filter: blur(var(--text-swap-blur)); opacity: 0; }
+.t-text-swap.is-enter-start { transform: translateY(var(--text-swap-translate-y)); filter: blur(var(--text-swap-blur)); opacity: 0; transition: none; }
+
+/* ───────────────────────── Intro ───────────────────────── */
+.intro { display: grid; grid-template-columns: minmax(0, 1fr) 270px; gap: 32px; margin-top: 32px; }
+/* Now line — every word / chip sits on an 8px horizontal rhythm */
+.now { margin: 0; display: flex; flex-wrap: wrap; align-items: center; column-gap: 8px; row-gap: 4px; line-height: 28px; color: var(--text-2); }
+.now .comma { margin-left: -8px; }
+.chip { position: relative; display: inline-flex; align-items: center; height: 28px; color: var(--text); white-space: nowrap; z-index: 1; }
+.chip:hover, .chip:focus-visible { z-index: 5; }
+.chip__rest { display: inline-flex; align-items: center; gap: 4px; transition: opacity var(--duration-quick) ease-out, filter var(--duration-quick) ease-out; }
+.chip__rest img { width: 24px; height: 24px; border-radius: 6px; }
+
+/* Hover badge (Figma: Section 1) — tilted pill, magnetic to the cursor */
+.badge {
+  --rot: 0deg; --mx: 0px; --my: 0px;
+  position: absolute; left: 50%; top: 50%; width: max-content;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 10px 6px 6px; border-radius: 14px;
+  font-size: 16px; line-height: 24px; white-space: nowrap;
+  background: var(--badge-bg); color: var(--badge-fg);
+  box-shadow: inset 0 0 0 1px var(--badge-border),
+    0 0 1px rgba(0,0,0,.06), 0 2px 2px rgba(0,0,0,.05), 0 3px 2px rgba(0,0,0,.03), 0 6px 2px rgba(0,0,0,.01);
+  opacity: 0; pointer-events: none;
+  filter: blur(var(--morph-blur));
+  transform: translate(calc(-50% + var(--mx)), calc(-50% + var(--my))) rotate(0deg) scale(.88);
+  transition:
+    opacity var(--duration-quick) var(--ease-smooth-out),
+    filter var(--duration-quick) var(--ease-smooth-out),
+    transform var(--duration-fast) var(--ease-smooth-out);
+  will-change: transform, opacity;
+}
+.badge img { width: 24px; height: 24px; border-radius: 8px; box-shadow: 0 0 0 2px var(--badge-ring); }
+.badge--dark  { --badge-bg: #2e2e2e; --badge-fg: #f9f9f9; --badge-border: #424242; --badge-ring: #424242; --rot: -4deg; }
+.badge--light { --badge-bg: #ffffff; --badge-fg: #2e2e2e; --badge-border: #f2f2f2; --badge-ring: #f2f2f2; --rot: 9deg; }
+.badge--pink  { --badge-bg: #f3def2; --badge-fg: #2e2e2e; --badge-border: #ebc9ea; --badge-ring: #ffffff; --rot: -6.2deg; }
+@media (hover: hover) {
+  .chip:hover .chip__rest, .chip:focus-visible .chip__rest { opacity: 0; filter: blur(2px); }
+  .chip:hover .badge, .chip:focus-visible .badge {
+    opacity: 1; filter: blur(0);
+    transform: translate(calc(-50% + var(--mx)), calc(-50% + var(--my))) rotate(var(--rot)) scale(1);
+    transition:
+      opacity var(--duration-fast) var(--ease-smooth-out),
+      filter var(--duration-fast) var(--ease-smooth-out),
+      transform var(--morph-open-dur) var(--morph-ease);
+  }
+  .chip.is-magnet .badge { transition: opacity var(--duration-fast) var(--ease-smooth-out), filter var(--duration-fast) var(--ease-smooth-out); }
+}
+
+/* ───────────────────────── Tabs — transitions.dev #16 ───────────────────────── */
+.nav-row { margin-top: 48px; display: flex; }
+.t-tabs { position: relative; display: inline-flex; align-items: center; gap: 2px; padding: 2px; border-radius: 48px; background: var(--tabs-bar-bg); max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+.t-tabs::-webkit-scrollbar { display: none; }
+.t-tab {
+  position: relative; appearance: none; border: 0; background: transparent;
+  height: 36px; padding: 0 10px 0 12px; display: inline-flex; align-items: center; gap: 8px;
+  color: var(--tabs-text-muted); font-size: 15px; font-weight: 500; line-height: 20px; white-space: nowrap;
+  cursor: pointer; border-radius: 48px; z-index: 1;
+  transition: color var(--tabs-dur) var(--tabs-ease);
+}
+.t-tab:not([aria-selected="true"]):hover { color: var(--tabs-text-hover); }
+.t-tab[aria-selected="true"] { color: var(--tabs-text-active); }
+.t-tab svg { width: 20px; height: 20px; }
+/* Hotkey badge — Figma: 20×19, fill #f0f0f0, 1px inside #e3e3e3, r6, p2/6, Inter Semi Bold 10, color follows state */
+.kbd { min-width: 20px; height: 19px; padding: 2px 6px; display: inline-grid; place-items: center; border-radius: 6px; background: var(--kbd-bg); box-shadow: inset 0 0 0 1px var(--kbd-border); font-size: 10px; line-height: 1.25; font-weight: 600; letter-spacing: .04em; color: currentColor; font-variant-numeric: tabular-nums; }
+.t-tabs-pill {
+  position: absolute; top: 2px; left: 0; height: 36px; width: 0;
+  background: var(--tabs-pill-bg); border-radius: 48px;
+  transform: translateX(0);
+  transition: transform var(--tabs-dur) var(--tabs-ease), width var(--tabs-dur) var(--tabs-ease);
+  will-change: transform, width; z-index: 0; pointer-events: none;
+}
+
+/* ───────────────────────── Pages — transitions.dev #08 + #01 ───────────────────────── */
+.t-resize { position: relative; margin-top: 48px; transition: height var(--resize-dur) var(--resize-ease); }
+.t-page {
+  opacity: 0; pointer-events: none;
+  transform: translateX(var(--t-page-from-x, 0px));
+  filter: blur(var(--page-blur));
+  transition:
+    opacity   var(--page-fade-dur)  var(--page-fade-ease),
+    transform var(--page-slide-dur) var(--page-slide-ease),
+    filter    var(--page-slide-dur) var(--page-slide-ease);
+  will-change: opacity, transform, filter;
+}
+.t-page[hidden] { display: none; }
+.t-page.is-active { opacity: 1; pointer-events: auto; transform: translateX(0); filter: blur(0); }
+.t-page.is-leaving { position: absolute; top: 0; left: 0; right: 0; }
+
+/* Texts reveal — transitions.dev #18 (applied to page children + first paint) */
+.t-stagger-line {
+  opacity: 0; transform: translateY(var(--stagger-distance)); filter: blur(var(--stagger-blur));
+  transition:
+    opacity   var(--stagger-dur) var(--stagger-ease),
+    transform var(--stagger-dur) var(--stagger-ease),
+    filter    var(--stagger-dur) var(--stagger-ease);
+  transition-delay: calc(var(--i, 0) * var(--stagger-stagger));
+  will-change: transform, opacity, filter;
+}
+.t-stagger.is-shown .t-stagger-line { opacity: 1; transform: translateY(0); filter: blur(0); }
+
+/* ───────────────────────── Media placeholders ───────────────────────── */
+.media {
+  position: relative; overflow: hidden; border-radius: var(--r-card);
+  background: var(--surface);
+  display: grid; place-items: center;
+  color: var(--text-3); font-size: 14px; letter-spacing: .01em;
+}
+.media::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(0,0,0,.035); pointer-events: none; }
+.media > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* Showreel — a single video; the slides are cut into the video itself */
+.reel { aspect-ratio: 16 / 9; max-width: 100%; }
+.reel video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.reel__ph { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; background: radial-gradient(120% 90% at 80% 10%, #fff2ec 0%, #fff 60%); }
+.reel__ph b { display: block; font-weight: 500; color: var(--text); font-size: 15px; margin-bottom: 2px; }
+.reel.has-video .reel__ph { opacity: 0; transition: opacity var(--reveal-dur) var(--reveal-ease); }
+
+/* ───────────────────────── Work grid ───────────────────────── */
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+.col { display: flex; flex-direction: column; gap: 32px; }
+.card { display: block; border-radius: var(--r-card); }
+.card .media { transition: transform var(--duration-slow) var(--ease-smooth-out), box-shadow var(--duration-slow) var(--ease-smooth-out); }
+.card .media span, .card .media > img { transition: transform var(--duration-slow) var(--ease-smooth-out); }
+@media (hover: hover) {
+  .card:hover .media { transform: translateY(-3px); box-shadow: 0 18px 40px -18px rgba(0,0,0,.18); }
+  .card:hover .media span, .card:hover .media > img { transform: scale(1.03); }
+}
+.card:active .media { transform: scale(.985); }
+.card__title { margin: 12px 0 0; font-size: 16px; line-height: 1.5; font-weight: 400; color: var(--text); text-wrap: balance; }
+.card__meta { margin-top: 12px; display: flex; align-items: center; gap: 4px; font-size: 14px; letter-spacing: .01em; color: var(--text-3); }
+.card__meta img { width: 16px; height: 16px; border-radius: 4px; }
+.card__ico { flex: none; color: var(--text-3); }
+.card__arrow { display: inline-flex; margin-left: 4px; opacity: 0; transform: translateX(-4px); transition: opacity var(--duration-fast) var(--ease-smooth-out), transform var(--duration-fast) var(--ease-smooth-out); }
+.card:hover .card__arrow, .card:focus-visible .card__arrow { opacity: 1; transform: translateX(0); }
+/* Two master formats for every image & video:
+   16:9 → 1920 × 1080 (videos, small cards)   4:3 → 1920 × 1440 (large cards) */
+.r169, .h200 { aspect-ratio: 16 / 9; height: auto; max-width: 100%; }
+.r43,  .h300 { aspect-ratio: 4 / 3;  height: auto; max-width: 100%; }
+
+/* ───────────────────────── About ───────────────────────── */
+.bio { max-width: var(--col); }
+.bio p { margin: 0 0 24px; color: var(--text-2); }
+.bio p:first-child { color: var(--text); }
+.block { margin-top: 48px; max-width: var(--col); }
+.block .label { margin-bottom: 24px; }
+.xp { display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; align-items: start; }
+.xp + .xp { margin-top: 24px; }
+.xp__role { margin: 0; color: var(--text); }
+.xp__years { margin: 0; color: var(--text-3); text-align: right; }
+.xp__org { margin: 0; color: var(--text-2); display: flex; align-items: center; gap: 8px; grid-column: 1 / -1; font-size: 14px; line-height: 20px; }
+.xp__org--school { display: block; }
+.xp__org img { width: 24px; height: 24px; border-radius: 6px; }
+.links { margin-top: 48px; max-width: var(--col); display: flex; flex-direction: column; gap: 2px; }
+.links--wide { margin-top: 24px; max-width: none; }  /* home: rows span the showreel card */
+
+/* Link row with learn-more hover — transitions.dev #24 (adapted to arrow-up-right) */
+.t-learn { display: flex; align-items: center; gap: 12px; height: 48px; padding: 0 10px; margin: 0 -10px; border-radius: 12px; transition: background-color var(--duration-quick) ease-out; }
+@media (hover: hover) { .t-learn:hover { background: var(--surface-muted); } }
+.t-learn__icon { color: var(--text-2); }
+.t-learn__title { flex: 1; }
+.t-learn__value { color: var(--text); }
+.t-learn--copy { width: calc(100% + 20px); text-align: left; }
+.t-learn-copy { width: 24px; height: 24px; place-items: center; color: var(--text-3); transition: color var(--learn-out) var(--learn-ease); }
+.t-learn--copy:hover .t-learn-copy { color: var(--text); }
+.t-learn-chevron { display: inline-flex; color: var(--text-3); transform: translate(0, 0); transition: transform var(--learn-out) var(--learn-ease), color var(--learn-out) var(--learn-ease); }
+.t-learn:hover .t-learn-chevron { transform: translate(var(--learn-shift), calc(var(--learn-shift) * -1)); color: var(--text); transition-duration: var(--learn-in); }
+
+/* ───────────────────────── Footer ───────────────────────── */
+.footer { margin-top: auto; padding: 96px 0 36px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+@media (min-width: 641px) {
+  .shell { padding-bottom: 112px; }
+  .footer {
+    position: fixed; left: 50%; bottom: 0; z-index: 20;
+    width: min(100%, calc(var(--container) + var(--gutter) * 2));
+    transform: translateX(-50%);
+    padding: 40px var(--gutter) calc(36px + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(to top, var(--bg) 55%, rgba(249,249,249,0));
+    pointer-events: none;
+  }
+  .footer > * { pointer-events: auto; }
+}
+.footer .label { margin: 0; }
+.footer__social { display: flex; gap: 12px; }
+.footer__social a { width: 24px; height: 24px; color: var(--text-3); transition: color var(--duration-quick) ease-out, transform var(--duration-fast) var(--ease-bounce); }
+.footer__social a:hover { color: var(--text); transform: translateY(-2px); }
+
+/* ───────────────────────── Case dialog — transitions.dev #06 ───────────────────────── */
+.overlay {
+  position: fixed; inset: 0; z-index: 50;
+  background: rgba(255,255,255,.7);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  opacity: 0; pointer-events: none;
+  transition: opacity var(--modal-open-dur) var(--modal-ease);
+}
+.overlay.is-open { opacity: 1; pointer-events: auto; }
+.overlay.is-closing { opacity: 0; transition-duration: var(--modal-close-dur); }
+.dialog-wrap { position: fixed; inset: 0; z-index: 51; overflow-y: auto; overscroll-behavior: contain; padding: 72px 24px 64px; pointer-events: none; }
+.dialog-wrap.is-live { pointer-events: auto; }
+.t-modal {
+  position: relative; max-width: 1120px; margin: 0 auto;
+  background: var(--surface); border-radius: var(--r-dialog);
+  box-shadow: var(--shadow-modal), inset 0 0 0 1px var(--border);
+  overflow: clip;  /* clip, not hidden: keeps the close button + nav sticky */
+  transform-origin: center top;
+  transform: scale(var(--modal-scale)); opacity: 0; pointer-events: none;
+  transition: transform var(--modal-open-dur) var(--modal-ease), opacity var(--modal-open-dur) var(--modal-ease);
+  will-change: transform, opacity;
+}
+.t-modal.is-open { transform: scale(1); opacity: 1; pointer-events: auto; }
+.t-modal.is-closing { transform: scale(var(--modal-scale-close)); opacity: 0; pointer-events: none; transition: transform var(--modal-close-dur) var(--modal-ease), opacity var(--modal-close-dur) var(--modal-ease); }
+.dialog__bar { position: sticky; top: 0; height: 0; z-index: 3; }
+.dialog__grab { display: none; }
+.dialog__close { position: absolute; top: 20px; right: 20px; box-shadow: 0 1px 2px rgba(0,0,0,.06); width: 34px; height: 34px; border-radius: 999px; background: var(--bg); display: grid; place-items: center; color: var(--text-2); transition: transform var(--duration-fast) var(--ease-smooth-out), color var(--duration-quick) ease-out; }
+.dialog__close:hover { color: var(--text); transform: rotate(90deg); }
+/* "Open project" — split pill, only for cases with a live product (prod.rec) */
+.dialog__open { flex: none; margin-left: auto; height: 34px; display: flex; align-items: center; border-radius: 999px; background: #e15fd8; color: #fff; font-size: 14px; font-weight: 500; box-shadow: 0 1px 2px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.18); transition: background-color var(--duration-quick) ease-out, transform var(--duration-fast) var(--ease-smooth-out); }
+.dialog__open span { padding: 0 12px 0 14px; }
+.dialog__open svg { box-sizing: content-box; padding: 0 9px 0 8px; height: 34px; border-left: 1px solid rgba(255,255,255,.35); transition: transform var(--duration-fast) var(--ease-smooth-out); }
+.dialog__open:hover { background: #d54ccc; }
+.dialog__open:hover svg { transform: translateX(2px); }
+.dialog__open:active { transform: scale(.97); }
+.dialog__open[aria-disabled="true"] { opacity: .6; cursor: default; }
+.dialog__body { max-width: 640px; margin: 0 auto; padding: 56px 24px 32px; }
+.dialog__head { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.dialog__logo-link { flex: none; display: block; border-radius: 12px; transition: transform var(--duration-fast) var(--ease-bounce); }
+@media (hover: hover) { .dialog__logo-link:hover { transform: rotate(-3deg); } }
+.dialog__logo-link:active { transform: scale(.94); }
+.dialog__logo-link:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+.dialog__head img, .dialog__logo { flex: none; width: 48px; height: 48px; border-radius: 12px; }
+.dialog__logo { display: grid; place-items: center; background: var(--surface-muted); color: var(--text-2); font-size: 20px; }
+.dialog__name { margin: 0; font-size: 20px; line-height: 1.3; font-weight: 400; }
+.dialog__meta { margin: 4px 0 0; color: var(--text-3); }
+.dialog__tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.dialog__tags span { height: 25px; padding: 0 10px; display: inline-flex; align-items: center; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--border); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--text-2); }
+.dialog__text p { margin: 0 0 24px; color: var(--text-2); }
+.dialog__text p:last-child { margin-bottom: 0; }
+/* Gallery — rows of one wide shot or two 4:3 shots side by side */
+.dialog__gallery { padding: 0 20px 20px; display: grid; gap: 20px; }
+.dialog__row { display: grid; gap: 20px; }
+.dialog__row--pair { grid-template-columns: 1fr 1fr; }
+.dialog__shot { position: relative; overflow: hidden; width: 100%; padding: 0; border: 0; font: inherit; cursor: pointer; border-radius: 24px; background: var(--surface-muted); display: grid; place-items: center; color: var(--text-3); font-size: 14px; }
+.dialog__shot:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+.dialog__shot img, .dialog__shot video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform var(--duration-slow) var(--ease-smooth-out); }
+@media (hover: hover) { .dialog__shot:hover img, .dialog__shot:hover video { transform: scale(1.015); } }
+/* Full-screen viewer */
+.lightbox { position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; padding: 72px 88px; background: rgba(18,18,18,.9); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); opacity: 0; transition: opacity var(--modal-close-dur) var(--modal-ease); }
+.lightbox.is-open { opacity: 1; transition-duration: var(--modal-open-dur); }
+.lightbox[hidden], .lightbox__img[hidden] { display: none; }
+.lightbox__img { max-width: calc(100vw - 176px); max-height: calc(100vh - 144px); max-height: calc(100dvh - 144px); width: auto; height: auto; border-radius: 12px; box-shadow: 0 24px 64px rgba(0,0,0,.4); transform: scale(.97); transition: transform var(--modal-open-dur) var(--modal-ease); }
+.lightbox.is-open .lightbox__img { transform: scale(1); }
+.lightbox__img.is-swap { animation: lb-swap 120ms ease-out; }
+@keyframes lb-swap { from { opacity: .7; } to { opacity: 1; } }
+.lightbox__btn { position: absolute; width: 44px; height: 44px; border: 0; border-radius: 999px; display: grid; place-items: center; background: rgba(255,255,255,.12); color: #fff; cursor: pointer; transition: background-color var(--duration-quick) ease-out, transform var(--duration-fast) var(--ease-smooth-out); }
+.lightbox__btn:hover { background: rgba(255,255,255,.22); }
+.lightbox__btn:active { transform: scale(.94); }
+.lightbox__btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.lightbox__close { top: 20px; right: 20px; }
+.lightbox__prev { left: 24px; top: 50%; margin-top: -22px; }
+.lightbox__next { right: 24px; top: 50%; margin-top: -22px; }
+.lightbox.is-single .lightbox__prev, .lightbox.is-single .lightbox__next, .lightbox.is-single .lightbox__count { display: none; }
+.lightbox__count { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); margin: 0; font-size: 14px; letter-spacing: .04em; color: rgba(255,255,255,.7); font-variant-numeric: tabular-nums; }
+.dialog__shot::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(0,0,0,.04); pointer-events: none; }
+.dialog__caption { max-width: 640px; margin: 8px auto 16px; color: var(--text-2); }
+.dialog__caption b { color: var(--text); font-weight: 500; }
+.dialog__nav { display: flex; justify-content: space-between; gap: 20px; padding: 0 20px 20px; }
+.dialog__nav a { flex: 1; padding: 16px 20px; border-radius: 20px; background: var(--bg); transition: background-color var(--duration-quick) ease-out; }
+.dialog__nav a:hover { background: var(--surface-muted); }
+.dialog__nav a:last-child { text-align: right; }
+.dialog__nav svg { display: none; }
+.dialog__nav small { display: block; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--text-3); font-weight: 500; }
+body.is-locked { overflow: hidden; }
+
+/* ───────────────────────── Cursor — small translucent grey dot, a bigger one over anything clickable ───────────────────────── */
+@media (pointer: fine) {
+  html, body, * { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Ccircle cx='7' cy='7' r='6' fill='%23808080' fill-opacity='.5' stroke='%23fff' stroke-opacity='.6'/%3E%3C/svg%3E") 7 7, auto !important; }
+  a, button, [role="tab"], label, summary, .dialog__shot, .dialog__shot * { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6.7' fill='%23808080' fill-opacity='.5' stroke='%23fff' stroke-opacity='.6'/%3E%3C/svg%3E") 8 8, pointer !important; }
+  [aria-disabled="true"], [aria-disabled="true"] * { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Ccircle cx='7' cy='7' r='6' fill='%23808080' fill-opacity='.5' stroke='%23fff' stroke-opacity='.6'/%3E%3C/svg%3E") 7 7, default !important; }
+  input, textarea, [contenteditable] { cursor: text !important; }
+}
+
+/* ───────────────────────── Responsive ───────────────────────── */
+@media (max-width: 820px) {
+  .intro { grid-template-columns: 1fr; gap: 24px; }
+}
+@media (max-width: 640px) {
+  :root { --gutter: 16px; }
+  .shell { padding-top: 24px; }
+  .profile__name { font-size: 18px; }
+  .grid { grid-template-columns: 1fr; }
+  .nav-row { margin-top: 32px; }
+  .t-resize { margin-top: 32px; }
+  .nav-row .t-tabs { width: 100%; justify-content: space-between; }
+  .t-tab { padding: 0 12px; flex: 1; justify-content: center; font-size: 14px; }
+  .t-tab svg { display: none; }
+  .t-tab[data-external] svg { display: block; width: 16px; height: 16px; }
+  .col { display: contents; }
+  .card[href="#case-prodrec"] { order: 1; } .card[href="#case-inview"] { order: 2; }
+  .card[href="#case-emg"] { order: 3; } .card[href="#case-inview-circle"] { order: 4; }
+  .card[href="#case-capita"] { order: 5; } .card[href="#case-archive"] { order: 6; }
+  .grid { gap: 40px; }
+  .now { column-gap: 8px; }
+  .footer { padding-top: 80px; padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px)); }
+  .dialog-wrap { padding: 72px 12px 24px; }
+  .dialog__body { padding: 64px 20px 24px; }
+  .dialog__gallery { padding: 0 12px 12px; gap: 12px; }
+  .dialog__row { gap: 12px; }
+  .dialog__row--pair { grid-template-columns: 1fr; }
+  .dialog__shot { border-radius: 16px; }
+  .lightbox { padding: 64px 12px 88px; }
+  .lightbox__img { border-radius: 8px; max-width: calc(100vw - 24px); max-height: calc(100vh - 152px); max-height: calc(100dvh - 152px); }
+  .lightbox__close { top: calc(12px + env(safe-area-inset-top, 0px)); right: 12px; }
+  .lightbox__prev, .lightbox__next { top: auto; margin: 0; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
+  .lightbox__prev { left: 16px; } .lightbox__next { right: 16px; }
+  .lightbox__count { bottom: calc(32px + env(safe-area-inset-bottom, 0px)); }
+  .dialog__caption { padding: 0 8px; }
+
+  .header__actions { gap: 8px; }
+  .t-morph-plus__label, .t-morph-plus__chev { display: none; }
+  .t-morph-plus__icon { display: grid; }
+}
+
+@media (min-width: 641px) and (max-width: 820px) {
+  .grid { gap: 24px; } .col { gap: 24px; }
+}
+/* Hotkeys only where a physical keyboard is likely (no touch-only devices) */
+@media (hover: none), (pointer: coarse) { .kbd { display: none; } }
+/* Phone: case opens as a bottom sheet */
+@media (max-width: 640px) {
+  .dialog-wrap { padding: 0; padding-top: calc(env(safe-area-inset-top, 0px) + 24px); overflow: hidden; }
+  .t-modal {
+    border-radius: 24px 24px 0 0; height: 100%;
+    overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+    transform-origin: center bottom;
+    transform: translateY(40px); 
+  }
+  .t-modal.is-open { transform: translateY(0); }
+  .t-modal.is-closing { transform: translateY(40px); }
+  .t-modal { display: flex; flex-direction: column; }
+  .t-modal > * { flex-shrink: 0; }
+  .t-modal.is-dragging { transition: none !important; }
+  .dialog__grab { display: block; position: absolute; top: 8px; left: 50%; width: 36px; height: 5px; margin-left: -18px; border-radius: 3px; background: rgba(0,0,0,.18); }
+  .dialog__bar::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 64px; } /* swipe handle zone */
+  .dialog__head { flex-wrap: wrap; }
+  .dialog__open { order: 3; margin-left: 0; width: 100%; height: 40px; }
+  .dialog__open span { flex: 1; text-align: center; }
+  .dialog__open svg { height: 40px; }
+  .dialog__close { top: 12px; right: 12px; width: 36px; height: 36px; background: rgba(249,249,249,.86); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+  /* Prev / next — pinned to the bottom of the sheet, 44px tall section */
+  .dialog__nav {
+    position: sticky; bottom: 0; z-index: 3; margin-top: auto;
+    flex-direction: row; gap: 8px;
+    padding: 4px 12px calc(4px + env(safe-area-inset-bottom, 0px));
+    background: rgba(255,255,255,.78); -webkit-backdrop-filter: blur(20px) saturate(1.6); backdrop-filter: blur(20px) saturate(1.6);
+    box-shadow: 0 -1px 0 rgba(0,0,0,.06);
+  }
+  .dialog__nav a { height: 36px; padding: 0 12px; border-radius: 12px; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; background: var(--surface-muted); }
+  .dialog__nav a:last-child { justify-content: flex-end; }
+  .dialog__nav small { display: none; }
+  .dialog__nav svg { display: block; color: var(--text-3); }
+  .dialog__gallery { padding-bottom: 16px; }
+
+  /* Sticky segmented control — becomes a translucent, blurred bar once stuck */
+  .nav-row {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 25;
+    margin: 24px calc(var(--gutter) * -1) 0; padding: 8px var(--gutter);
+    transition: background-color var(--duration-fast) var(--ease-smooth-out), box-shadow var(--duration-fast) var(--ease-smooth-out), -webkit-backdrop-filter var(--duration-fast) var(--ease-smooth-out), backdrop-filter var(--duration-fast) var(--ease-smooth-out);
+  }
+  .nav-row.is-stuck {
+    background: rgba(249,249,249,.72);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6); backdrop-filter: blur(20px) saturate(1.6);
+    box-shadow: 0 1px 0 rgba(0,0,0,.06);
+  }
+  .nav-row.is-stuck .t-tabs { background: rgba(240,240,240,.72); }
+  .t-tabs { transition: background-color var(--duration-fast) var(--ease-smooth-out); }
+  .t-resize { margin-top: 24px; }
+  .t-learn__value { font-size: 14px; }
+  .footer { flex-direction: column-reverse; align-items: flex-start; gap: 16px; }
+}
+@media (max-width: 380px) {
+  .profile__name { font-size: 16px; }
+  .profile__photo { width: 40px; height: 40px; border-radius: 10px; }
+  .profile { gap: 10px; }
+  .t-tab { padding: 0 8px; font-size: 13px; }
+  .t-learn { gap: 10px; }
+  .t-learn__title { display: none; }
+  .t-learn__value { flex: 1; overflow-wrap: anywhere; }
+}
+
+/* Reduced motion guards (required by transitions.dev snippets) */
+@media (prefers-reduced-motion: reduce) {
+  .t-icon-swap .t-icon, .t-morph, .t-morph-plus, .t-morph-menu, .t-text-swap,
+  .t-tabs-pill, .t-tab, .t-page, .t-resize, .t-stagger-line, .t-modal, .overlay,
+  .t-learn-chevron, .badge, .chip__rest, .profile__photo, .profile__photo img, .card .media, .card .media span,
+  .card .media > img, .dialog__shot img, .lightbox, .lightbox__img { transition: none !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="container">
+
+    <!-- ───────── Header ───────── -->
+    <header class="header t-stagger" id="intro">
+      <a class="profile t-stagger-line" style="--i:0" href="#home" aria-label="Illia Tverdun — home">
+        <span class="profile__photo"><img src="assets/avatar.png" alt="" width="48" height="48"><img src="assets/avatar-glasses.png" alt="" width="48" height="48"></span>
+        <div>
+          <p class="profile__name">Illia Tverdun</p>
+          <p class="profile__role">Product Designer</p>
+        </div>
+      </a>
+
+      <div class="header__actions t-stagger-line" style="--i:1">
+        <button class="icon-btn t-icon-swap" id="soundBtn" data-state="a" aria-label="Turn sound on" aria-pressed="false">
+          <svg class="t-icon" data-icon="a" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path transform="translate(2 2.67)" d="M0 3.33H2.67L7.33 0V10.67L2.67 7.33H0V3.33Z M9.25 3.92L12.08 6.75 M9.25 6.75L12.08 3.92"/></svg>
+          <svg class="t-icon" data-icon="b" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path transform="translate(2 2.67)" d="M0 3.33H2.67L7.33 0V10.67L2.67 7.33H0V3.33Z"/><path d="M11.6 6.2a2.6 2.6 0 0 1 0 3.6 M13.4 4.6a5 5 0 0 1 0 6.8"/></svg>
+        </button>
+
+        <div class="contact-slot" id="contactSlot">
+          <div class="t-morph" id="contact" data-open="false">
+            <button class="t-morph-plus" id="contactBtn" aria-expanded="false" aria-controls="contactMenu">
+              <span class="t-morph-plus__label">Get in touch</span>
+              <span class="t-morph-plus__icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path transform="translate(2.5 4.5)" d="M0 0H19V15H0V0Z M.5 2L9.5 9.5L18.5 2"/></svg></span>
+              <span class="t-morph-plus__chev"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path transform="translate(6.23 4.23)" d="M0 7.54C1.61 6.58 2.79 5.37 3.77 3.77C2.79 2.17 1.61 0.96 0 0"/></svg></span>
+            </button>
+            <div class="t-morph-menu" id="contactMenu" role="dialog" aria-label="Get in touch">
+              <div class="pop__head">
+                <p class="pop__title">Get in touch</p>
+                <button class="pop__close" id="contactClose" aria-label="Close"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+              </div>
+              <div class="pop__row">
+                <div><p>Email</p><p class="muted">ilyatverdun@gmail.com</p></div>
+                <div class="seg-btns">
+                  <button id="copyBtn" data-copy="ilyatverdun@gmail.com" aria-label="Copy email">
+                    <span class="t-text-swap" id="copyLabel">Copy</span>
+                    <span class="t-icon-swap" id="copyIcon" data-state="a">
+                      <svg class="t-icon" data-icon="a" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1.75" y="5.25" width="9" height="9" rx="2.25"/><path d="M5.25 5.25V4A2.25 2.25 0 0 1 7.5 1.75H12A2.25 2.25 0 0 1 14.25 4V8.5A2.25 2.25 0 0 1 12 10.75H10.75"/></svg>
+                      <svg class="t-icon" data-icon="b" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg>
+                    </span>
+                  </button>
+                </div>
+              </div>
+              <div class="pop__row">
+                <div><p>Socials</p><p class="muted">LinkedIn for fast contact</p></div>
+                <div class="seg-btns">
+                  <a href="#" target="_blank" rel="noopener" aria-label="X (Twitter)" data-todo="x-url"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.3L5.3 21H2.2l7.2-8.3L1.8 3h6.4l4.4 5.8L17.8 3Zm-1.1 16.2h1.7L7.3 4.7H5.5l11.2 14.5Z"/></svg></a>
+                  <a class="li" href="https://www.linkedin.com/in/ilya-tverdun/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4V21H3V9.75Zm6.5 0h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5c0-1.2 0-2.8-1.7-2.8s-2 1.3-2 2.7V21h-4V9.75Z"/></svg></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ───────── Intro ───────── -->
+    <section class="intro t-stagger" id="introText">
+      <div class="t-stagger-line" style="--i:2">
+        <p class="label">About</p>
+        <p class="body">Hi, I’m Illia — a product designer based in Warsaw.<br>For 8+ years I’ve been helping teams turn complex ideas into clear, well-crafted products people enjoy using.</p>
+      </div>
+      <div class="t-stagger-line" style="--i:3">
+        <p class="label">Now</p>
+        <p class="now">
+          <span>Exploring</span> <span>design</span> <span>engineering,</span> <span>building</span>
+          <a class="chip" href="#case-prodrec" data-todo-url="prodrec-url" aria-label="prod.rec"><span class="chip__rest"><img src="assets/prodrec.png" alt="">prod.rec</span><span class="badge badge--pink" aria-hidden="true"><img src="assets/prodrec.png" alt="">prod.rec</span></a><span class="comma">,</span>
+          <span>designing</span>
+          <a class="chip" href="https://ch.linkedin.com/company/inved-immobilier" target="_blank" rel="noopener" aria-label="inved.sa on LinkedIn"><span class="chip__rest"><img src="assets/inved.png" alt="">inved.sa</span><span class="badge badge--dark" aria-hidden="true"><img src="assets/inved.png" alt="">inved.sa</span></a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ───────── Tabs ───────── -->
+    <nav class="nav-row t-stagger" id="navWrap" aria-label="Main">
+      <div class="t-tabs t-stagger-line" style="--i:4" role="tablist" id="tabs">
+        <span class="t-tabs-pill" aria-hidden="true"></span>
+        <a class="t-tab" role="tab" href="#home" data-route="home" aria-selected="true">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path transform="translate(1.21 3)" d="M2.02 5.04C2.4 3.71 2.59 3.05 2.94 2.53C3.44 1.78 4.18 1.22 5.05 .94C5.64 .75 6.33 .75 7.71 .75C9.09 .75 9.78 .75 10.38 .94C11.24 1.22 11.98 1.78 12.49 2.53C12.83 3.05 13.02 3.71 13.4 5.04L13.72 6.14C14.57 9.14 15 10.64 14.38 11.73C14.25 11.96 14.09 12.17 13.91 12.35C13.03 13.25 11.47 13.25 8.36 13.25H7.07C3.95 13.25 2.4 13.25 1.51 12.35C1.33 12.17 1.17 11.96 1.04 11.73C.42 10.64 .85 9.14 1.71 6.14L2.02 5.04Z"/></svg>
+          Home <span class="kbd">1</span>
+        </a>
+        <a class="t-tab" role="tab" href="#work" data-route="work" aria-selected="false">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path transform="translate(3.06 3.24)" d="M12.69 5.89L10.63 12.08C7.36 13.46 3.57 13.99 .02 13.85C-.12 10.3 .41 6.51 1.79 3.24L7.98 1.18L12.69 5.89Z M5.62 7.07C5.95 6.75 6.47 6.75 6.8 7.07C7.12 7.4 7.12 7.92 6.8 8.25C6.47 8.58 5.95 8.58 5.62 8.25C5.3 7.92 5.3 7.4 5.62 7.07Z M.91 12.96L5.62 8.25 M13.87 3.54L10.34 0"/></svg>
+          Work <span class="kbd">2</span>
+        </a>
+        <a class="t-tab" role="tab" href="#about" data-route="about" aria-selected="false">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path transform="translate(3.33 2.5)" d="M13.33 12.92C13.33 14.53 10.35 15 6.67 15C2.98 15 0 14.53 0 12.92C0 11.31 2.98 9.17 6.67 9.17C10.35 9.17 13.33 11.31 13.33 12.92Z M10 3.33C10 5.17 8.51 6.67 6.67 6.67C4.83 6.67 3.33 5.17 3.33 3.33C3.33 1.49 4.83 0 6.67 0C8.51 0 10 1.49 10 3.33Z"/></svg>
+          About <span class="kbd">3</span>
+        </a>
+        <a class="t-tab" href="#" target="_blank" rel="noopener" data-external data-todo="resume-url">
+          Resume
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path transform="translate(2.92 2.98)" d="M6.25 2.44C6.12 2.44 5.98 2.44 5.83 2.44C3.49 2.44 2.32 2.44 1.48 3C1.12 3.25 .8 3.56 .56 3.92C0 4.76 0 5.93 0 8.27C0 10.62 0 11.79 .56 12.63C.8 12.99 1.12 13.3 1.48 13.55C2.32 14.11 3.49 14.11 5.83 14.11C8.17 14.11 9.34 14.11 10.19 13.55C10.55 13.3 10.86 12.99 11.1 12.63C11.67 11.79 11.67 10.62 11.67 8.27C11.67 8.13 11.67 7.99 11.67 7.86 M5.42 8.69L13.33 .77 M13.75 4.52C14.23 3.09 14.23 1.8 13.75 .36C12.31 -.12 11.02 -.12 9.58 .36"/></svg>
+        </a>
+      </div>
+    </nav>
+
+    <!-- ───────── Pages ───────── -->
+    <main class="t-resize" id="pages">
+
+      <!-- HOME -->
+      <section class="t-page" data-page="home" data-index="0" aria-label="Home">
+        <div class="media reel" id="reel" aria-label="Showreel">
+          <video id="reelVideo" muted loop playsinline preload="auto" poster="assets/showreel.webp" aria-hidden="true">
+            <source src="assets/showreel.webm" type="video/webm">
+            <source src="assets/showreel.mp4" type="video/mp4">
+          </video>
+          <div class="reel__ph"><span><b>Showreel</b>1920 × 1080 video</span></div>
+        </div>
+        <div class="links links--wide">
+          <button type="button" class="t-learn t-learn--copy" data-copy="ilyatverdun@gmail.com" aria-label="Copy email ilyatverdun@gmail.com">
+            <span class="t-learn__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path transform="translate(2.5 4.5)" d="M0 0H19V15H0V0Z M.5 2L9.5 9.5L18.5 2"/></svg></span>
+            <span class="t-learn__title">Email</span>
+            <span class="t-learn__value">ilyatverdun@gmail.com</span>
+            <span class="t-learn-copy t-icon-swap" data-state="a"><svg class="t-icon" data-icon="a" width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1.75" y="5.25" width="9" height="9" rx="2.25"/><path d="M5.25 5.25V4A2.25 2.25 0 0 1 7.5 1.75H12A2.25 2.25 0 0 1 14.25 4V8.5A2.25 2.25 0 0 1 12 10.75H10.75"/></svg><svg class="t-icon" data-icon="b" width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg></span>
+          </button>
+          <a class="t-learn" href="https://www.linkedin.com/in/ilya-tverdun/" target="_blank" rel="noopener">
+            <span class="t-learn__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 10.5V16 M8 7.75v.01 M11.5 16v-5.5 M11.5 13c0-1.5 1-2.5 2.25-2.5S16 11.5 16 13v3" stroke-linecap="round"/></svg></span>
+            <span class="t-learn__title">LinkedIn</span>
+            <span class="t-learn__value">/in/ilya-tverdun/</span>
+            <span class="t-learn-chevron"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path transform="translate(6.34 6.09)" d="M10.61 .97L0 11.57 M3.07 .5C5.8 -.18 8.34 -.15 11.07 .5C11.72 3.24 11.75 5.78 11.07 8.5"/></svg></span>
+          </a>
+        </div>
+      </section>
+
+      <!-- WORK -->
+      <section class="t-page t-stagger" data-page="work" data-index="1" aria-label="Work" hidden>
+        <div class="grid">
+          <div class="col">
+            <a class="card t-stagger-line" style="--i:0" href="#case-prodrec">
+              <div class="media h300"><img src="assets/cases/prodrec/1440/01.webp" alt="" width="1920" height="1440" loading="lazy" decoding="async"></div>
+              <h3 class="card__title">prod.rec — time tracking and invoicing for freelancers</h3>
+              <div class="card__meta"><img src="assets/prodrec.png" alt="">prod.rec · 2026<span class="card__arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></div>
+            </a>
+            <a class="card t-stagger-line" style="--i:2" href="#case-emg">
+              <div class="media h200"><img src="assets/cases/panora/1080/01.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async"></div>
+              <h3 class="card__title">Panora — all your personal insurance in one place</h3>
+              <div class="card__meta"><img src="assets/emg.png" alt="">emg.sa · 2024–2026<span class="card__arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></div>
+            </a>
+            <a class="card t-stagger-line" style="--i:4" href="#case-capita">
+              <div class="media h300"><img src="assets/cases/capita/1440/01.webp" alt="" width="1920" height="1440" loading="lazy" decoding="async"></div>
+              <h3 class="card__title">Capita — company insurance, managed in one dashboard</h3>
+              <div class="card__meta"><img src="assets/emg.png" alt="">emg.sa · 2024–2026<span class="card__arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></div>
+            </a>
+          </div>
+          <div class="col">
+            <a class="card t-stagger-line" style="--i:1" href="#case-inview">
+              <div class="media h200"><img src="assets/cases/inview/1080/01.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async"></div>
+              <h3 class="card__title">Inview — real-estate analysis for investors</h3>
+              <div class="card__meta"><img src="assets/inved.png" alt="">inved.sa · 2024–now<span class="card__arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></div>
+            </a>
+            <a class="card t-stagger-line" style="--i:3" href="#case-inview-circle">
+              <div class="media h300"><img src="assets/cases/inview-circle/1440/01.webp" alt="" width="1920" height="1440" loading="lazy" decoding="async"></div>
+              <h3 class="card__title">Inview Circle — co-investing in real estate, together</h3>
+              <div class="card__meta"><img src="assets/inved.png" alt="">inved.sa · 2024–now<span class="card__arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></div>
+            </a>
+            <a class="card t-stagger-line" style="--i:5" href="#case-archive">
+              <div class="media h200"><img src="assets/cases/others/1080/01.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async"></div>
+              <h3 class="card__title">Earlier projects and freelance playground</h3>
+              <div class="card__meta"><svg class="card__ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8M10 12h4"/></svg>Archive · 2018–2024<span class="card__arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M9 7h8v8"/></svg></span></div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section class="t-page t-stagger" data-page="about" data-index="2" aria-label="About" hidden>
+        <div class="bio t-stagger-line" style="--i:0">
+          <p>I see myself as a designer who’s comfortable with complexity.</p>
+          <p>I work on insurance and real estate products, where every flow involves real money and decisions people take seriously. My job is to untangle that logic for the user.</p>
+          <p>Over the past 8+ years, I’ve worked as the sole designer on the team, building products from scratch and shaping them together with the team and stakeholders.</p>
+          <p>Outside of client work, I’m building prod.rec, because I want to ship what I design, not just hand it off to developers.</p>
+        </div>
+
+        <div class="block t-stagger-line" style="--i:1">
+          <p class="label">Experience</p>
+          <div class="xp"><p class="xp__role">Founder &amp; Designer</p><p class="xp__years">2026</p><p class="xp__org"><img src="assets/prodrec.png" alt="">prod.rec</p></div>
+          <div class="xp"><p class="xp__role">Product Designer</p><p class="xp__years">2024–Present</p><p class="xp__org"><img src="assets/inved.png" alt="">inved.sa</p></div>
+          <div class="xp"><p class="xp__role">Product Designer</p><p class="xp__years">2024–2026</p><p class="xp__org"><img src="assets/emg.png" alt="">emg.sa</p></div>
+          <div class="xp"><p class="xp__role">UX/UI Designer</p><p class="xp__years">2022–2024</p><p class="xp__org"><img src="assets/sereda.png" alt="">sereda.ai</p></div>
+          <div class="xp"><p class="xp__role">Graphic/Web Designer</p><p class="xp__years">2018</p><p class="xp__org">Various Studios</p></div>
+        </div>
+
+        <div class="block t-stagger-line" style="--i:2">
+          <p class="label">Education</p>
+          <div class="xp"><p class="xp__role">Civil Engineering</p><p class="xp__years">2016–2020</p><p class="xp__org xp__org--school">Kyiv National University<br>of Construction and Architecture</p></div>
+        </div>
+
+        <div class="links t-stagger-line" style="--i:3">
+          <button type="button" class="t-learn t-learn--copy" data-copy="ilyatverdun@gmail.com" aria-label="Copy email ilyatverdun@gmail.com">
+            <span class="t-learn__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path transform="translate(2.5 4.5)" d="M0 0H19V15H0V0Z M.5 2L9.5 9.5L18.5 2"/></svg></span>
+            <span class="t-learn__title">Email</span>
+            <span class="t-learn__value">ilyatverdun@gmail.com</span>
+            <span class="t-learn-copy t-icon-swap" data-state="a"><svg class="t-icon" data-icon="a" width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1.75" y="5.25" width="9" height="9" rx="2.25"/><path d="M5.25 5.25V4A2.25 2.25 0 0 1 7.5 1.75H12A2.25 2.25 0 0 1 14.25 4V8.5A2.25 2.25 0 0 1 12 10.75H10.75"/></svg><svg class="t-icon" data-icon="b" width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg></span>
+          </button>
+          <a class="t-learn" href="https://www.linkedin.com/in/ilya-tverdun/" target="_blank" rel="noopener">
+            <span class="t-learn__icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 10.5V16 M8 7.75v.01 M11.5 16v-5.5 M11.5 13c0-1.5 1-2.5 2.25-2.5S16 11.5 16 13v3" stroke-linecap="round"/></svg></span>
+            <span class="t-learn__title">LinkedIn</span>
+            <span class="t-learn__value">/in/ilya-tverdun/</span>
+            <span class="t-learn-chevron"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path transform="translate(6.34 6.09)" d="M10.61 .97L0 11.57 M3.07 .5C5.8 -.18 8.34 -.15 11.07 .5C11.72 3.24 11.75 5.78 11.07 8.5"/></svg></span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <!-- ───────── Footer ───────── -->
+    <footer class="footer">
+      <p class="label">Designed &amp; built by Illia Tverdun · ©2026</p>
+      <div class="footer__social">
+        <a href="https://www.linkedin.com/in/ilya-tverdun/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2ZM8.3 18H5.7V9.8h2.6V18ZM7 8.6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3ZM18.3 18h-2.6v-4c0-1 0-2.2-1.4-2.2s-1.6 1.1-1.6 2.2v4.1h-2.6V9.8h2.5v1.1c.4-.7 1.2-1.3 2.5-1.3 2.6 0 3.1 1.7 3.1 4V18Z"/></svg></a>
+        <a href="#" target="_blank" rel="noopener" aria-label="X (Twitter)" data-todo="x-url"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.3L5.3 21H2.2l7.2-8.3L1.8 3h6.4l4.4 5.8L17.8 3Zm-1.1 16.2h1.7L7.3 4.7H5.5l11.2 14.5Z"/></svg></a>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<!-- ───────── Case dialog ───────── -->
+<div class="overlay" id="overlay"></div>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Screenshot viewer" hidden>
+  <img class="lightbox__img" id="lightboxImg" alt="">
+  <video class="lightbox__img" id="lightboxVideo" muted loop playsinline hidden></video>
+  <button type="button" class="lightbox__btn lightbox__close" data-lb="close" aria-label="Close viewer"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+  <button type="button" class="lightbox__btn lightbox__prev" data-lb="-1" aria-label="Previous screen"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5L5.5 8l4.5 4.5"/></svg></button>
+  <button type="button" class="lightbox__btn lightbox__next" data-lb="1" aria-label="Next screen"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5L10.5 8 6 12.5"/></svg></button>
+  <p class="lightbox__count" id="lightboxCount" aria-live="polite"></p>
+</div>
+<div class="dialog-wrap" id="dialogWrap">
+  <article class="t-modal" id="caseModal" role="dialog" aria-modal="true" aria-labelledby="caseName"></article>
+</div>
+
+<script>
+/* ───────────────────────── Case content ───────────────────────── */
+/* gallery: each row is one shot (full width) or two shots (side by side).
+   A shot is "<1080|1440>/<file>" inside assets/cases/<dir>/ — 1080 → 16:9, 1440 → 4:3.
+   Pairs are meant for 4:3 shots: light/dark versions, mobile screens, before/after.
+   Videos: "<name>.video" → <name>.webm + .mp4 fallback, "<name>.webm" → WebM only; poster is <name>.webp.
+   They autoplay muted while in view. */
+const CASES = {
+  inview: {
+    logo: "assets/inved.png", company: "inved", name: "Inview", meta: "Product designer · 2024–now",
+    tags: ["Product design", "Back office"],
+    text: [
+      "Inview is a real-estate analysis platform by inved.sa. Investors use it to source properties, compare them with the market and decide which deals are worth their time — from the first listing to the last document.",
+      "The challenge: a lot of dense data — prices, yields, comparables, off-market listings — that had to feel calm and easy to scan, plus a credit-based model that is clear before anyone spends a credit.",
+      "My role: product design end to end — research, flows, UI and the design system shared with Inview Circle."
+    ],
+    dir: "inview",
+    gallery: [["1080/01"], ["1080/sourcing-desktop.video"], ["1440/sourcing-mobile.video", "1440/03"], ["1080/analyze.video"], ["1440/04", "1440/05"], ["1080/administration.video"], ["1080/07"]]
+  },
+  "inview-circle": {
+    logo: "assets/inved.png", company: "inved", name: "Inview Circle", meta: "Product designer · 2024–now",
+    tags: ["Product design", "Investor platform"],
+    text: [
+      "Inview Circle is a platform for co-investing in real estate. A project owner brings a property, investors join with their share, and everyone follows the same project — interests, investors, renovation works and finances — in one place.",
+      "The challenge: shared money needs shared clarity. Every investor should see where the project stands, what has been spent and what comes next, without having to call the owner.",
+      "My role: product design from the first concept — project workspace, renovation planning with contractors, investor views and sharing."
+    ],
+    dir: "inview-circle",
+    gallery: [["1080/01"], ["1440/02", "1440/03"], ["1440/map.video"], ["1080/04"], ["1440/05", "1440/06"]]
+  },
+  emg: {
+    logo: "assets/emg.png", company: "emg", name: "Panora", meta: "Product designer · 2024–2026",
+    tags: ["Product design", "Mobile", "Design system"],
+    text: [
+      "Panora is a B2C service by emg.sa for keeping all your personal insurance in one place: contracts, monthly payments and documents, with an AI chat that explains what you’re actually covered for.",
+      "The challenge: most people don’t know what their policies cover or how much they pay in total. Panora turns a drawer full of contracts into a clear picture — what goes out each month, what’s due next and which common coverages are still missing.",
+      "My role: product design for web and mobile, the design system shared with Capita, and UX copy in French."
+    ],
+    dir: "panora",
+    gallery: [["1080/01"], ["1440/03-2", "1440/03-3"], ["1080/02"], ["1440/add-contract.webm"], ["1440/03", "1440/06"], ["1080/04"], ["1440/05"]]
+  },
+  capita: {
+    logo: "assets/emg.png", company: "emg", name: "Capita", meta: "Product designer · 2024–2026",
+    tags: ["Product design", "Light & dark"],
+    text: [
+      "Capita is a B2B service by emg.sa that helps companies store and manage their insurance: every contract, document and claim in one dashboard, with a personal broker one click away.",
+      "The challenge: company insurance is scattered across insurers, PDFs and email threads. The goal was a single view of spend and coverage — by employees, vehicles and real estate — that a finance manager can read in a minute.",
+      "My role: product design, light and dark themes, built on the same design system as Panora."
+    ],
+    dir: "capita",
+    gallery: [["1080/01"], ["1440/02", "1440/03"], ["1440/04", "1440/04-dark"], ["1080/01-dark"]]
+  },
+  prodrec: {
+    logo: "assets/prodrec.png", name: "prod.rec", meta: "Founder & designer · 2026",
+    tags: ["UX research", "Product design", "Design engineering"],
+    url: "", // TODO: live product link — "Open project" stays disabled until it's set
+    text: [
+      "prod.rec is a time-tracking and invoicing tool I designed and built for myself — and for freelancers who juggle several clients at once.",
+      "The problem: hours lived in one app, invoices in another, and every month ended with an hour of copy-pasting. The goal was simple — logging time takes one click, turning it into an invoice takes one more.",
+      "My role: everything — product, UX/UI, design system and React front-end. Below are the key decisions, each with a short note on why."
+    ],
+    dir: "prodrec",
+    gallery: [["1080/01"], ["1440/02", "1440/03"]]
+  },
+  archive: {
+    logo: null, icon: "archive", name: "Archive", meta: "2018–2024",
+    tags: ["Product design", "Freelance"],
+    text: [
+      "Everything I designed before the cases above, starting from 2018 — product work for startups, agency projects and freelance clients, including sereda.ai.",
+      "Smaller in scope, but it’s where most of my craft took shape: dashboards, mobile apps, landing pages and plenty of experiments."
+    ],
+    dir: "others",
+    gallery: [["1080/01"], ["1440/02", "1440/03"], ["1080/04"], ["1440/05", "1440/07"], ["1080/06"]]
+  }
+};
+/* Company logos in the case header link to the company's LinkedIn */
+const COMPANIES = {
+  inved: { name: "inved.sa", url: "https://ch.linkedin.com/company/inved-immobilier" },
+  emg:   { name: "emg.sa",   url: "" }   // TODO: emg.sa LinkedIn URL
+};
+const CASE_ORDER = ["prodrec", "inview", "emg", "inview-circle", "capita", "archive"];
+const shotSrc = (c, s) => `assets/cases/${c.dir}/${s}.webp`;
+const isVideo = s => /\.(video|webm)$/.test(s);
+const videoBase = (c, s) => `assets/cases/${c.dir}/${s.replace(/\.(video|webm)$/, "")}`;
+const videoSources = (c, s) => `<source src="${videoBase(c, s)}.webm" type="video/webm">`
+  + (s.endsWith(".video") ? `<source src="${videoBase(c, s)}.mp4" type="video/mp4">` : "");
+const ICONS = { archive: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8M10 12h4"/></svg>` };
+
+/* ───────────────────────── Helpers ───────────────────────── */
+const root = document.documentElement;
+const cssMs = (name, fallback) => parseFloat(getComputedStyle(root).getPropertyValue(name)) || fallback;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ───────────────────────── First paint — Texts reveal (#18) ───────────────────────── */
+function showStagger(el) {
+  el.classList.remove("is-shown");
+  void el.offsetHeight;
+  el.classList.add("is-shown");
+}
+requestAnimationFrame(() => document.querySelectorAll("#intro, #introText, #navWrap").forEach(showStagger));
+
+/* ───────────────────────── Tabs sliding (#16) ───────────────────────── */
+const bar = document.getElementById("tabs");
+const pill = bar.querySelector(".t-tabs-pill");
+const tabs = [...bar.querySelectorAll(".t-tab[data-route]")];
+function movePill(tab, animate) {
+  if (!animate) {
+    const prev = pill.style.transition;
+    pill.style.transition = "none";
+    pill.style.transform = `translateX(${tab.offsetLeft}px)`;
+    pill.style.width = `${tab.offsetWidth}px`;
+    void pill.offsetWidth;
+    pill.style.transition = prev;
+  } else {
+    pill.style.transform = `translateX(${tab.offsetLeft}px)`;
+    pill.style.width = `${tab.offsetWidth}px`;
+  }
+}
+const activeTab = () => tabs.find(t => t.getAttribute("aria-selected") === "true") || tabs[0];
+window.addEventListener("resize", () => { movePill(activeTab(), false); syncHeight(false); });
+document.fonts && document.fonts.ready.then(() => movePill(activeTab(), false));
+
+/* ───────────────────────── Pages — side-by-side (#08) + card resize (#01) ───────────────────────── */
+const pagesEl = document.getElementById("pages");
+const pages = [...pagesEl.querySelectorAll(".t-page")];
+let current = null;
+
+function syncHeight(animate = true) {
+  const active = pagesEl.querySelector(".t-page.is-active");
+  if (!active) return;
+  if (!animate) { pagesEl.style.transition = "none"; }
+  pagesEl.style.height = active.offsetHeight + "px";
+  if (!animate) { void pagesEl.offsetHeight; pagesEl.style.transition = ""; }
+}
+/* Observe the pages, not the container: content that reflows later (fonts, media) must grow the box */
+const pageRO = new ResizeObserver(() => syncHeight(true));
+pages.forEach(p => pageRO.observe(p));
+
+function showPage(name, first) {
+  const next = pages.find(p => p.dataset.page === name) || pages[0];
+  if (current === next) return;
+  const prev = current;
+  const dir = prev ? Math.sign(+next.dataset.index - +prev.dataset.index) : 0;
+  const dist = cssMs("--page-slide-distance", 8);
+  const dur = cssMs("--page-slide-dur", 250);
+
+  if (first) pages.forEach(p => { if (p !== next) { p.hidden = true; p.classList.remove("is-active"); } });
+  // incoming starts offset in the direction of travel
+  next.hidden = false;
+  next.classList.remove("is-leaving");
+  next.style.setProperty("--t-page-from-x", `${dir * dist}px`);
+  next.style.transition = "none";
+  next.classList.remove("is-active");
+  void next.offsetWidth;
+  next.style.transition = "";
+  if (first) next.style.setProperty("--t-page-from-x", "0px");
+  next.classList.add("is-active");
+  if (next.classList.contains("t-stagger")) showStagger(next);
+
+  if (prev) {
+    const h = pagesEl.offsetHeight;
+    pagesEl.style.height = h + "px";
+    prev.classList.add("is-leaving");
+    prev.style.setProperty("--t-page-from-x", `${-dir * dist}px`);
+    prev.classList.remove("is-active");
+    setTimeout(() => { if (!prev.classList.contains("is-active")) { prev.hidden = true; prev.classList.remove("is-leaving"); } }, dur + 30);
+  }
+  current = next;
+  requestAnimationFrame(() => syncHeight(!first));
+  if (!first && navWrap.classList.contains("is-stuck")) {
+    const top = navSentinel.getBoundingClientRect().top + scrollY;
+    window.scrollTo({ top, behavior: reduce ? "auto" : "smooth" });
+  }
+
+  tabs.forEach(t => t.setAttribute("aria-selected", t.dataset.route === next.dataset.page ? "true" : "false"));
+  movePill(activeTab(), !first);
+  name === "home" ? reel.play() : reel.pause();
+}
+
+/* ───────────────────────── Router ───────────────────────── */
+/* Bare-token hashes (#work, #about, #case-prodrec). Old "#/work/prodrec" links still resolve. */
+function parseToken(raw) {
+  const t = (raw || "").replace(/^#\/?/, "").replace(/\//g, "-").toLowerCase();
+  if (t.startsWith("work-") && CASES[t.slice(5)]) return "case-" + t.slice(5);
+  return t;
+}
+let currentToken = null;
+function render(token, first = false) {
+  if (lb.open) lb.close(true);
+  let page = "home", caseKey = null;
+  if (token === "work" || token === "about") page = token;
+  else if (token.startsWith("case-") && CASES[token.slice(5)]) { page = "work"; caseKey = token.slice(5); }
+  currentToken = caseKey ? "case-" + caseKey : page;
+  showPage(page, first);
+  if (caseKey) openCase(caseKey);
+  else if (modalOpen) closeCase();
+  document.title = caseKey ? `${CASES[caseKey].name} — Illia Tverdun`
+    : page === "home" ? "Illia Tverdun — Product Designer"
+    : `${page[0].toUpperCase() + page.slice(1)} — Illia Tverdun`;
+}
+function navigate(token) {
+  if (token === currentToken) return;
+  try { history.pushState({ token }, "", "#" + token); } catch (_) {}
+  render(token);
+}
+document.addEventListener("click", (e) => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+  if (a.hasAttribute("data-todo")) { e.preventDefault(); return; }
+  e.preventDefault();
+  navigate(parseToken(a.getAttribute("href")) || "home");
+});
+window.addEventListener("popstate", () => render(parseToken(location.hash) || "home"));
+window.addEventListener("hashchange", () => { const t = parseToken(location.hash) || "home"; if (t !== currentToken) render(t); });
+
+document.addEventListener("keydown", (e) => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (/input|textarea|select/i.test(document.activeElement.tagName)) return;
+  if (lb.open) {
+    if (e.key === "Escape") lb.close();
+    else if (e.key === "ArrowLeft") lb.step(-1);
+    else if (e.key === "ArrowRight") lb.step(1);
+    else if (e.key === "Tab") trapFocus(e, lbEl);
+    return;
+  }
+  if (e.key === "Escape") {
+    if (contact.dataset.open === "true") { setContact(false); contactBtn.focus(); return; }
+    if (modalOpen) navigate("work");
+    return;
+  }
+  if (modalOpen) {
+    if (e.key === "Tab") trapFocus(e);
+    else if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      const idx = CASE_ORDER.indexOf(currentToken.slice(5));
+      const next = CASE_ORDER[(idx + (e.key === "ArrowRight" ? 1 : -1) + CASE_ORDER.length) % CASE_ORDER.length];
+      e.preventDefault();
+      navigate("case-" + next);
+    }
+    return;
+  }
+  const map = { "1": "home", "2": "work", "3": "about" };
+  if (map[e.key]) navigate(map[e.key]);
+});
+function trapFocus(e, scope = modal) {
+  const f = [...scope.querySelectorAll('a[href], button:not([disabled])')];
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  else if (!scope.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+}
+
+/* ───────────────────────── Showreel video ───────────────────────── */
+const reel = (() => {
+  const box = document.getElementById("reel");
+  const v = document.getElementById("reelVideo");
+  const hasSrc = () => !!(v.currentSrc || v.querySelector("source"));
+  v.addEventListener("loadeddata", () => box.classList.add("has-video"));
+  let want = false;
+  return {
+    play() { want = true; if (hasSrc() && !reduce) v.play().catch(() => {}); },
+    pause() { want = false; v.pause(); }
+  };
+})();
+
+/* ───────────────────────── UI sounds — only while the sound toggle is on ───────────────────────── */
+/* <audio> rather than Web Audio: fetch() is blocked on file://, and a clone per play lets sounds overlap. */
+const sfx = (() => {
+  const files = { hat1: "open-hat-1", hat2: "open-hat-2", hat3: "open-hat-3", hat4: "open-hat-4", bass: "bass", avatar: "main-photo-hover", click: "click", open: "modal-open", close: "modal-close" };
+  const volume = { hat1: 0.5, hat2: 0.5, hat3: 0.5, hat4: 0.5, bass: 0.5, avatar: 0.7, click: 0.7, open: 0.7, close: 0.7 };
+  const base = {};
+  for (const [k, f] of Object.entries(files)) { const a = new Audio(`assets/sounds/${f}.mp3`); a.preload = "auto"; a.volume = volume[k]; base[k] = a; }
+  const last = {};
+  return {
+    on: false,
+    play(name, minGap = 60) {
+      if (!this.on || !base[name]) return;
+      const now = performance.now();
+      if (now - (last[name] || 0) < minGap) return;   // no machine-gun on fast hovers
+      last[name] = now;
+      const a = base[name].cloneNode();
+      a.volume = base[name].volume;   // cloneNode copies attributes, not volume
+      a.play().catch(() => {});
+    }
+  };
+})();
+
+/* ───────────────────────── Sound toggle — icon swap (#09) ───────────────────────── */
+const soundBtn = document.getElementById("soundBtn");
+function setSound(on) {
+  sfx.on = on;
+  soundBtn.dataset.state = on ? "b" : "a";
+  soundBtn.setAttribute("aria-pressed", String(on));
+  soundBtn.setAttribute("aria-label", on ? "Turn sound off" : "Turn sound on");
+  document.querySelectorAll("video").forEach(v => v.muted = !on);
+  try { localStorage.setItem("sound", on ? "1" : "0"); } catch {}
+}
+try { if (localStorage.getItem("sound") === "1") setSound(true); } catch {}
+soundBtn.addEventListener("click", () => { setSound(soundBtn.dataset.state === "a"); sfx.play("click"); });  // audible only when turning on
+
+/* Click on anything interactive. Opening / closing a case has its own sounds, so those clicks stay silent. */
+document.addEventListener("click", (e) => {
+  const el = e.target.closest('a, button, [role="tab"]');
+  if (!el || el.matches(".dialog__close, #soundBtn, #copyBtn, .t-learn--copy, .lightbox__prev, .lightbox__next")) return;
+  if (!modalOpen && (el.getAttribute("href") || "").startsWith("#case-")) return;
+  sfx.play("click");
+}, true);
+
+/* Avatar: sound when the photo swaps on hover */
+if (matchMedia("(hover: hover)").matches) {
+  document.querySelector(".profile")?.addEventListener("pointerenter", () => sfx.play("avatar", 300));
+}
+
+/* Open hat on hover over the "Now" badges (prod.rec, inved.sa) — a random one of four, never the same twice in a row */
+if (matchMedia("(hover: hover)").matches) {
+  let lastHat = 0;
+  const hat = () => {
+    let n;
+    do n = 1 + Math.floor(Math.random() * 4); while (n === lastHat);
+    lastHat = n;
+    sfx.play("hat" + n, 0);
+  };
+  let lastHatAt = 0;
+  document.querySelectorAll(".now .chip").forEach(chip => chip.addEventListener("pointerenter", () => {
+    const now = performance.now();
+    if (now - lastHatAt < 150) return;   // no machine-gun on fast hovers
+    lastHatAt = now; hat();
+  }));
+}
+
+/* ───────────────────────── Get in touch morph (#20) ───────────────────────── */
+const contact = document.getElementById("contact");
+const contactSlot = document.getElementById("contactSlot");
+const contactBtn = document.getElementById("contactBtn");
+const contactMenu = document.getElementById("contactMenu");
+function measureContact() {
+  const w = contactBtn.offsetWidth;
+  contactSlot.style.setProperty("--closed-w", w + "px");
+  contact.style.setProperty("--closed-w", w + "px");
+  const openW = Math.min(400, document.querySelector(".header").offsetWidth);
+  contact.style.setProperty("--open-w", openW + "px");
+  contactMenu.style.width = openW + "px";
+  contact.style.setProperty("--open-h", contactMenu.offsetHeight + "px");
+}
+function setContact(open) {
+  const was = contact.dataset.open === "true";
+  if (open === was) return;
+  if (open) measureContact();
+  contact.setAttribute("data-open", String(open));
+  contactBtn.setAttribute("aria-expanded", String(open));
+  contactMenu.toggleAttribute("inert", !open);
+  contactBtn.toggleAttribute("inert", open);
+  if (open) setTimeout(() => document.getElementById("copyBtn").focus({ preventScroll: true }), 60);
+}
+contactMenu.setAttribute("inert", "");
+document.fonts && document.fonts.ready.then(measureContact);
+measureContact();
+contactBtn.addEventListener("click", (e) => { e.stopPropagation(); setContact(true); });
+document.getElementById("contactClose").addEventListener("click", (e) => { e.stopPropagation(); setContact(false); contactBtn.focus({ preventScroll: true }); });
+document.addEventListener("click", (e) => { if (!contact.contains(e.target)) setContact(false); });
+window.addEventListener("resize", measureContact);
+
+/* Copy email — text swap (#04) + icon swap (#09) */
+const copyBtn = document.getElementById("copyBtn");
+const copyLabel = document.getElementById("copyLabel");
+const copyIcon = document.getElementById("copyIcon");
+function swapText(el, next) {
+  const dur = cssMs("--text-swap-dur", 150);
+  el.classList.add("is-exit");
+  setTimeout(() => {
+    el.textContent = next;
+    el.classList.remove("is-exit");
+    el.classList.add("is-enter-start");
+    void el.offsetHeight;
+    el.classList.remove("is-enter-start");
+  }, dur);
+}
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); }
+  catch { const t = document.createElement("textarea"); t.value = text; document.body.append(t); t.select(); document.execCommand("copy"); t.remove(); }
+}
+let copyTimer;
+copyBtn.addEventListener("click", async () => {
+  await copyText(copyBtn.dataset.copy);
+  sfx.play("bass");
+  clearTimeout(copyTimer);
+  if (copyIcon.dataset.state !== "b") { swapText(copyLabel, "Copied"); copyIcon.dataset.state = "b"; }
+  copyTimer = setTimeout(() => { swapText(copyLabel, "Copy"); copyIcon.dataset.state = "a"; }, 1800);
+});
+
+/* Email rows (Home, About): copy instead of mailto, copy icon → check */
+document.querySelectorAll(".t-learn--copy").forEach(btn => {
+  const icon = btn.querySelector(".t-learn-copy");
+  let t;
+  btn.addEventListener("click", async () => {
+    await copyText(btn.dataset.copy);
+    sfx.play("bass");
+    icon.dataset.state = "b";
+    clearTimeout(t);
+    t = setTimeout(() => { icon.dataset.state = "a"; }, 1800);
+  });
+});
+
+/* ───────────────────────── Case dialog — modal (#06) ───────────────────────── */
+const overlay = document.getElementById("overlay");
+const wrap = document.getElementById("dialogWrap");
+const phoneMQ = matchMedia("(max-width: 640px)");
+const caseScroller = () => phoneMQ.matches ? modal : wrap;
+const modal = document.getElementById("caseModal");
+let modalOpen = false, lastFocus = null;
+
+function caseHTML(key) {
+  const c = CASES[key];
+  const idx = CASE_ORDER.indexOf(key);
+  const prev = CASES[CASE_ORDER[(idx - 1 + CASE_ORDER.length) % CASE_ORDER.length]];
+  const next = CASES[CASE_ORDER[(idx + 1) % CASE_ORDER.length]];
+  const prevKey = CASE_ORDER[(idx - 1 + CASE_ORDER.length) % CASE_ORDER.length];
+  const nextKey = CASE_ORDER[(idx + 1) % CASE_ORDER.length];
+  const co = COMPANIES[c.company];
+  const logo = co ? `<a class="dialog__logo-link" href="${co.url || "#"}" ${co.url ? 'target="_blank" rel="noopener"' : 'data-todo aria-disabled="true" title="Coming soon"'} aria-label="${co.name} on LinkedIn"><img src="${c.logo}" alt=""></a>`
+    : c.logo ? `<img src="${c.logo}" alt="">`
+    : `<span class="dialog__logo" aria-hidden="true">${c.icon ? ICONS[c.icon] : c.name[0]}</span>`;
+  const shot = (s, i) => {
+    const r43 = s.startsWith("1440/");
+    const media = isVideo(s)
+      ? `<video muted loop playsinline preload="none" poster="${videoBase(c, s)}.webp" aria-label="${c.name} — video ${i + 1}">${videoSources(c, s)}</video>`
+      : `<img src="${shotSrc(c, s)}" alt="${c.name} — screen ${i + 1}" width="1920" height="${r43 ? 1440 : 1080}" ${i ? 'loading="lazy" ' : ""}decoding="async">`;
+    return `<button type="button" class="dialog__shot ${r43 ? "r43" : "r169"}" data-shot="${i}" aria-label="Open screen ${i + 1} full screen">${media}</button>`;
+  };
+  let n = 0;
+  const gallery = c.gallery.map(row => `<div class="dialog__row${row.length > 1 ? " dialog__row--pair" : ""}">${row.map(s => shot(s, n++)).join("")}</div>`).join("");
+  const open = "url" in c
+    ? `<a class="dialog__open" href="${c.url || "#"}" ${c.url ? 'target="_blank" rel="noopener"' : 'data-todo aria-disabled="true" title="Coming soon"'}><span>Open project</span><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4L10.5 8l-4 4"/></svg></a>`
+    : "";
+  return `
+    <div class="dialog__bar">
+      <span class="dialog__grab" aria-hidden="true"></span>
+      <a class="dialog__close" href="#work" aria-label="Close"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></a>
+    </div>
+    <div class="dialog__body t-stagger">
+      <div class="dialog__head t-stagger-line" style="--i:0">${logo}
+        <div><h2 class="dialog__name" id="caseName">${c.name}</h2><p class="dialog__meta">${c.meta}</p></div>
+        ${open}
+      </div>
+      ${c.tags ? `<div class="dialog__tags t-stagger-line" style="--i:1">${c.tags.map(t => `<span>${t}</span>`).join("")}</div>` : ""}
+      <div class="dialog__text">${c.text.map((t, i) => `<p class="t-stagger-line" style="--i:${i + 2}">${t}</p>`).join("")}</div>
+    </div>
+    ${gallery ? `<div class="dialog__gallery">${gallery}</div>` : ""}
+    <nav class="dialog__nav" aria-label="More work">
+      <a href="#case-${prevKey}" aria-label="Previous case: ${prev.name}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5L5.5 8l4.5 4.5"/></svg><small>Previous</small>${prev.name}</a>
+      <a href="#case-${nextKey}" aria-label="Next case: ${next.name}"><small>Next</small>${next.name}<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5L10.5 8 6 12.5"/></svg></a>
+    </nav>`;
+}
+
+function openCase(key) {
+  const swapping = modalOpen;
+  if (!swapping) sfx.play("open");
+  modal.innerHTML = caseHTML(key);
+  if (!swapping) lastFocus = document.activeElement;
+  modalOpen = true;
+  document.body.classList.add("is-locked");
+  wrap.classList.add("is-live");
+  wrap.scrollTop = 0; modal.scrollTop = 0;
+  overlay.classList.remove("is-closing");
+  overlay.classList.add("is-open");
+  modal.classList.remove("is-closing");
+  if (!swapping) { modal.classList.remove("is-open"); void modal.offsetWidth; }
+  modal.classList.add("is-open");
+  showStagger(modal.querySelector(".t-stagger"));
+  watchVideos();
+  modal.querySelector(".dialog__close").focus({ preventScroll: true });
+}
+/* Case videos play only while they're on screen */
+let videoIO = null;
+function watchVideos() {
+  videoIO?.disconnect();
+  if (reduce) return;
+  videoIO = new IntersectionObserver(entries => entries.forEach(({ target: v, isIntersecting }) => {
+    if (isIntersecting) { v.preload = "auto"; v.play().catch(() => {}); } else v.pause();
+  }), { threshold: 0.2 });
+  modal.querySelectorAll(".dialog__shot video").forEach(v => videoIO.observe(v));
+}
+
+function closeCase() {
+  if (!modalOpen) return;
+  sfx.play("close");
+  videoIO?.disconnect();
+  modal.querySelectorAll("video").forEach(v => v.pause());
+  modalOpen = false;
+  const closeMs = cssMs("--modal-close-dur", 150);
+  modal.classList.remove("is-open");
+  modal.classList.add("is-closing");
+  overlay.classList.remove("is-open");
+  overlay.classList.add("is-closing");
+  setTimeout(() => {
+    modal.classList.remove("is-closing");
+    overlay.classList.remove("is-closing");
+    wrap.classList.remove("is-live");
+    document.body.classList.remove("is-locked");
+    modal.style.transform = ""; modal.style.transition = ""; overlay.style.opacity = "";
+    if (!modalOpen) modal.innerHTML = "";
+  }, closeMs);
+  lastFocus && lastFocus.focus && lastFocus.focus({ preventScroll: true });
+}
+wrap.addEventListener("click", (e) => { if (e.target === wrap) navigate("work"); });
+
+/* ───────────────────────── Full-screen viewer for case shots ───────────────────────── */
+const lbEl = document.getElementById("lightbox");
+const lbImg = document.getElementById("lightboxImg");
+const lbVid = document.getElementById("lightboxVideo");
+const lbCount = document.getElementById("lightboxCount");
+const lb = (() => {
+  let list = [], i = 0, trigger = null, hideT = 0;
+  // list items: { img } or { video: "<source> markup", poster }
+  const show = () => {
+    const it = list[i];
+    lbImg.hidden = !!it.video; lbVid.hidden = !it.video;
+    if (it.video) {
+      lbVid.innerHTML = it.video; lbVid.poster = it.poster; lbVid.load();
+      if (!reduce) lbVid.play().catch(() => {});
+    } else {
+      lbVid.pause(); lbVid.innerHTML = ""; lbVid.removeAttribute("poster");
+      lbImg.src = it.img;
+      lbImg.alt = `Screen ${i + 1} of ${list.length}`;
+    }
+    lbCount.textContent = `${i + 1} / ${list.length}`;
+    // warm up the neighbours so flipping feels instant
+    [list[(i + 1) % list.length], list[(i - 1 + list.length) % list.length]].forEach(n => { new Image().src = n.img || n.poster; });
+  };
+  const api = {
+    open: false,
+    show(srcs, start, from) {
+      list = srcs; i = start; trigger = from;
+      clearTimeout(hideT);
+      lbEl.hidden = false;
+      lbEl.classList.toggle("is-single", list.length < 2);
+      show();
+      void lbEl.offsetWidth;
+      lbEl.classList.add("is-open");
+      api.open = true;
+      lbEl.querySelector(".lightbox__close").focus({ preventScroll: true });
+    },
+    step(d) {
+      if (list.length < 2) return;
+      sfx.play("click");
+      i = (i + d + list.length) % list.length;
+      [lbImg, lbVid].forEach(el => { el.classList.remove("is-swap"); void el.offsetWidth; el.classList.add("is-swap"); });
+      show();
+    },
+    close(instant) {
+      if (!api.open) return;
+      api.open = false;
+      lbEl.classList.remove("is-open");
+      const done = () => { lbEl.hidden = true; lbImg.removeAttribute("src"); lbVid.pause(); lbVid.innerHTML = ""; };
+      if (instant || reduce) done(); else hideT = setTimeout(done, cssMs("--modal-close-dur", 150) + 50);
+      if (!instant && trigger && document.contains(trigger)) trigger.focus({ preventScroll: true });
+    }
+  };
+  return api;
+})();
+modal.addEventListener("click", (e) => {
+  const btn = e.target.closest(".dialog__shot");
+  if (!btn) return;
+  const shots = [...modal.querySelectorAll(".dialog__shot")].map(b => {
+    const v = b.querySelector("video");
+    return v ? { video: v.innerHTML, poster: v.getAttribute("poster") } : { img: b.querySelector("img").getAttribute("src") };
+  });
+  lb.show(shots, +btn.dataset.shot, btn);
+});
+lbEl.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-lb]");
+  if (b) { b.dataset.lb === "close" ? lb.close() : lb.step(+b.dataset.lb); return; }
+  if (e.target !== lbImg && e.target !== lbVid) lb.close();   // click on the backdrop
+});
+/* Swipe left / right to flip, down to close */
+(() => {
+  let x0 = 0, y0 = 0;
+  lbEl.addEventListener("touchstart", (e) => { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+  lbEl.addEventListener("touchend", (e) => {
+    const dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) lb.step(dx < 0 ? 1 : -1);
+    else if (dy > 80) lb.close();
+  }, { passive: true });
+})();
+
+/* Swipe down from the top of the sheet to close (phones) */
+(() => {
+  const phone = matchMedia("(max-width: 640px)");
+  let y0 = 0, t0 = 0, dy = 0, active = false;
+  modal.addEventListener("touchstart", (e) => {
+    if (!phone.matches || !modalOpen || e.touches.length > 1) return;
+    const fromTop = e.touches[0].clientY - modal.getBoundingClientRect().top;
+    const onBar = !!e.target.closest(".dialog__bar");                 // grabber zone — always draggable
+    const atTop = caseScroller().scrollTop <= 2 && (fromTop < 120 || e.target.closest(".dialog__head"));
+    if (!onBar && !atTop) return;
+    active = true; y0 = e.touches[0].clientY; t0 = performance.now(); dy = 0;
+  }, { passive: true });
+  modal.addEventListener("touchmove", (e) => {
+    if (!active) return;
+    dy = Math.max(0, e.touches[0].clientY - y0);
+    if (dy > 0) {
+      e.preventDefault();
+      modal.classList.add("is-dragging");
+      modal.style.transform = `translateY(${dy}px)`;
+      overlay.style.opacity = String(Math.max(0, 1 - dy / 500));
+    }
+  }, { passive: false });
+  const end = () => {
+    if (!active) return;
+    active = false;
+    const v = dy / Math.max(1, performance.now() - t0);         // px per ms
+    modal.classList.remove("is-dragging");
+    if (dy > 120 || (v > 0.6 && dy > 30)) {
+      modal.style.transition = "transform 240ms var(--ease-smooth-out)";
+      modal.style.transform = "translateY(100%)";
+      overlay.style.opacity = "0";
+      setTimeout(() => navigate("work"), 200);
+    } else {
+      modal.style.transition = "transform 320ms var(--ease-smooth-out)";
+      modal.style.transform = "";
+      overlay.style.opacity = "";
+      setTimeout(() => { modal.style.transition = ""; }, 330);
+    }
+  };
+  modal.addEventListener("touchend", end);
+  modal.addEventListener("touchcancel", end);
+})();
+
+/* Sticky segmented control: flag when it sticks (phones get the blurred bar) */
+const navWrap = document.getElementById("navWrap");
+const navSentinel = document.createElement("div");
+navSentinel.style.cssText = "height:1px;margin-bottom:-1px;";
+navWrap.before(navSentinel);
+new IntersectionObserver(([en]) => navWrap.classList.toggle("is-stuck", !en.isIntersecting && en.boundingClientRect.top < 0))
+  .observe(navSentinel);
+
+/* ───────────────────────── Magnetic badges in "Now" ───────────────────────── */
+if (matchMedia("(hover: hover)").matches && !reduce) {
+  document.querySelectorAll(".now .chip").forEach(chip => {
+    const badge = chip.querySelector(".badge");
+    const STRENGTH = 0.28, MAX = 6;            // small, smooth pull
+    let tx = 0, ty = 0, x = 0, y = 0, raf = 0, inside = false;
+    const tick = () => {
+      x += (tx - x) * 0.18; y += (ty - y) * 0.18;   // eased follow
+      badge.style.setProperty("--mx", x.toFixed(2) + "px");
+      badge.style.setProperty("--my", y.toFixed(2) + "px");
+      if (inside || Math.abs(x) > .05 || Math.abs(y) > .05) raf = requestAnimationFrame(tick);
+      else { raf = 0; chip.classList.remove("is-magnet"); }
+    };
+    const start = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    chip.addEventListener("pointerenter", () => { inside = true; setTimeout(() => inside && chip.classList.add("is-magnet"), 200); start(); });
+    chip.addEventListener("pointermove", (e) => {
+      const r = chip.getBoundingClientRect();
+      tx = Math.max(-MAX, Math.min(MAX, (e.clientX - (r.left + r.width / 2)) * STRENGTH));
+      ty = Math.max(-MAX, Math.min(MAX, (e.clientY - (r.top + r.height / 2)) * STRENGTH));
+      start();
+    });
+    chip.addEventListener("pointerleave", () => { inside = false; tx = 0; ty = 0; chip.classList.remove("is-magnet"); start(); });
+  });
+}
+
+/* Links still waiting for a real URL: keep them visible but inert */
+document.querySelectorAll("[data-todo]").forEach(a => { a.removeAttribute("target"); a.setAttribute("aria-disabled", "true"); a.title = "Coming soon"; });
+
+/* ───────────────────────── Boot ───────────────────────── */
+render(parseToken(location.hash) || "home", true);
+</script>
+</body>
+</html>
