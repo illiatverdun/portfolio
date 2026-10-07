@@ -1167,11 +1167,13 @@ const reel = (() => {
 /* ───────────────────────── UI sounds — only while the sound toggle is on ───────────────────────── */
 /* <audio> rather than Web Audio: fetch() is blocked on file://, and a clone per play lets sounds overlap. */
 const sfx = (() => {
-  const files = { hat1: "open-hat-1", hat2: "open-hat-2", hat3: "open-hat-3", hat4: "open-hat-4", bass: "bass", avatar: "main-photo-hover", click: "click", open: "modal-open", close: "modal-close" };
-  const volume = { hat1: 0.5, hat2: 0.5, hat3: 0.5, hat4: 0.5, bass: 0.5, avatar: 0.7, click: 0.7, open: 0.7, close: 0.7 };
+  const files = { hat1: "open-hat-1", hat2: "open-hat-2", hat3: "open-hat-3", hat4: "open-hat-4", bass: "bass", avatar: "main-photo-hover", click: "click", click2: "click-2", click3: "click-3", click4: "click-4", open: "modal-open", close: "modal-close" };
+  const volume = { hat1: 0.5, hat2: 0.5, hat3: 0.5, hat4: 0.5, bass: 0.5, avatar: 0.7, click: 0.7, click2: 0.7, click3: 0.7, click4: 0.7, open: 0.7, close: 0.7 };
   const base = {};
   for (const [k, f] of Object.entries(files)) { const a = new Audio(`assets/sounds/${f}.mp3`); a.preload = "auto"; a.volume = volume[k]; base[k] = a; }
   const last = {};
+  const clicks = ["click", "click2", "click3", "click4"];
+  let lastClick = "";
   return {
     on: false,
     play(name, minGap = 60) {
@@ -1179,6 +1181,10 @@ const sfx = (() => {
       const now = performance.now();
       if (now - (last[name] || 0) < minGap) return;   // no machine-gun on fast hovers
       last[name] = now;
+      if (name === "click") {   // random variant, never the same one twice in a row
+        const pool = clicks.filter(c => c !== lastClick);
+        name = lastClick = pool[Math.floor(Math.random() * pool.length)];
+      }
       const a = base[name].cloneNode();
       a.volume = base[name].volume;   // cloneNode copies attributes, not volume
       a.play().catch(() => {});
