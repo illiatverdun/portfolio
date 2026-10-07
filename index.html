@@ -281,7 +281,9 @@ svg { display: block; flex: none; }
 .now .comma { margin-left: -8px; }
 .chip { position: relative; display: inline-flex; align-items: center; height: 28px; color: var(--text); white-space: nowrap; z-index: 1; }
 .chip:hover, .chip:focus-visible { z-index: 5; }
-.chip__rest { display: inline-flex; align-items: center; gap: 4px; transition: opacity var(--duration-quick) ease-out, filter var(--duration-quick) ease-out; }
+.chip__rest { display: inline-flex; align-items: center; gap: 4px;
+  /* leaving: the word fades back in under the fading badge — a crossfade, not a cut */
+  transition: opacity var(--duration-medium) var(--ease-in-out) 80ms, filter var(--duration-medium) var(--ease-in-out) 80ms; }
 .chip__rest img { width: 24px; height: 24px; border-radius: 6px; }
 
 /* Hover badge (Figma: Section 1) — tilted pill, magnetic to the cursor */
@@ -297,10 +299,11 @@ svg { display: block; flex: none; }
   opacity: 0; pointer-events: none;
   filter: blur(var(--morph-blur));
   transform: translate(calc(-50% + var(--mx)), calc(-50% + var(--my))) rotate(0deg) scale(.88);
+  /* leaving: as unhurried as the entrance — gentle fade + blur while it untilts and shrinks */
   transition:
-    opacity var(--duration-quick) var(--ease-smooth-out),
-    filter var(--duration-quick) var(--ease-smooth-out),
-    transform var(--duration-fast) var(--ease-smooth-out);
+    opacity var(--duration-slow) var(--ease-in-out),
+    filter var(--duration-slow) var(--ease-in-out),
+    transform var(--duration-very-slow) var(--ease-smooth-out);
   will-change: transform, opacity;
 }
 .badge img { width: 24px; height: 24px; border-radius: 8px; box-shadow: 0 0 0 2px var(--badge-ring); }
@@ -308,7 +311,7 @@ svg { display: block; flex: none; }
 .badge--light { --badge-bg: #ffffff; --badge-fg: #2e2e2e; --badge-border: #f2f2f2; --badge-ring: #f2f2f2; --rot: 9deg; }
 .badge--pink  { --badge-bg: #f3def2; --badge-fg: #2e2e2e; --badge-border: #ebc9ea; --badge-ring: #ffffff; --rot: -6.2deg; }
 @media (hover: hover) {
-  .chip:hover .chip__rest, .chip:focus-visible .chip__rest { opacity: 0; filter: blur(2px); }
+  .chip:hover .chip__rest, .chip:focus-visible .chip__rest { opacity: 0; filter: blur(2px); transition: opacity var(--duration-quick) ease-out, filter var(--duration-quick) ease-out; }
   .chip:hover .badge, .chip:focus-visible .badge {
     opacity: 1; filter: blur(0);
     transform: translate(calc(-50% + var(--mx)), calc(-50% + var(--my))) rotate(var(--rot)) scale(1);
@@ -317,7 +320,7 @@ svg { display: block; flex: none; }
       filter var(--duration-fast) var(--ease-smooth-out),
       transform var(--morph-open-dur) var(--morph-ease);
   }
-  .chip.is-magnet .badge { transition: opacity var(--duration-fast) var(--ease-smooth-out), filter var(--duration-fast) var(--ease-smooth-out); }
+  .chip.is-magnet:hover .badge { transition: opacity var(--duration-fast) var(--ease-smooth-out), filter var(--duration-fast) var(--ease-smooth-out); }
 }
 
 /* ───────────────────────── Tabs — transitions.dev #16 ───────────────────────── */
@@ -736,7 +739,7 @@ body.is-locked { overflow: hidden; }
         <p class="label">Now</p>
         <p class="now">
           <span>Exploring</span> <span>design</span> <span>engineering,</span> <span>building</span>
-          <a class="chip" href="#case-prodrec" data-todo-url="prodrec-url" aria-label="prod.rec"><span class="chip__rest"><img src="assets/prodrec.png" alt="">prod.rec</span><span class="badge badge--pink" aria-hidden="true"><img src="assets/prodrec.png" alt="">prod.rec</span></a><span class="comma">,</span>
+          <a class="chip" href="#case-prodrec" aria-label="prod.rec"><span class="chip__rest"><img src="assets/prodrec.png" alt="">prod.rec</span><span class="badge badge--pink" aria-hidden="true"><img src="assets/prodrec.png" alt="">prod.rec</span></a><span class="comma">,</span>
           <span>designing</span>
           <a class="chip" href="https://ch.linkedin.com/company/inved-immobilier" target="_blank" rel="noopener" aria-label="inved.sa on LinkedIn"><span class="chip__rest"><img src="assets/inved.png" alt="">inved.sa</span><span class="badge badge--dark" aria-hidden="true"><img src="assets/inved.png" alt="">inved.sa</span></a>
         </p>
@@ -952,7 +955,7 @@ const CASES = {
   prodrec: {
     logo: "assets/prodrec.png", name: "prod.rec", meta: "Founder & designer · 2026",
     tags: ["UX research", "Product design", "Design engineering"],
-    url: "", // TODO: live product link — "Open project" stays disabled until it's set
+    url: "https://illiatverdun.github.io/prodrec/mvp/",
     text: [
       "prod.rec is a time-tracking and invoicing tool I designed and built for myself — and for freelancers who juggle several clients at once.",
       "The problem: hours lived in one app, invoices in another, and every month ended with an hour of copy-pasting. The goal was simple — logging time takes one click, turning it into an invoice takes one more.",
