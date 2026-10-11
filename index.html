@@ -509,6 +509,19 @@ svg { display: block; flex: none; }
 .dialog__meta { margin: 4px 0 0; color: var(--text-3); }
 .dialog__tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
 .dialog__tags span { height: 25px; padding: 0 10px; display: inline-flex; align-items: center; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--border); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--text-2); }
+/* Case overview — what a recruiter scans first: one-line summary, key facts, results, scope */
+.dialog__lead { margin: 0 0 24px; font-size: 18px; line-height: 1.45; color: var(--text); text-wrap: pretty; }
+.dialog__facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px 20px; margin: 0 0 24px; padding: 16px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.dialog__facts div { min-width: 0; }
+.dialog__facts dt, .dialog__label { margin: 0 0 4px; font-size: 12px; line-height: 1.25; letter-spacing: .04em; text-transform: uppercase; font-weight: 500; color: var(--text-3); }
+.dialog__facts dd { margin: 0; font-size: 14px; line-height: 1.4; color: var(--text); }
+.dialog__results { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin: 0 0 24px; }
+.dialog__results div { padding: 16px; border-radius: 16px; background: var(--surface-muted); }
+.dialog__results b { display: block; font-size: 28px; line-height: 1.1; font-weight: 500; letter-spacing: -.02em; color: var(--text); }
+.dialog__results span { display: block; margin-top: 6px; font-size: 13px; line-height: 1.35; color: var(--text-2); }
+.dialog__section { margin: 0 0 20px; }
+.dialog__section:last-child { margin-bottom: 0; }
+.dialog__section p { margin: 0; color: var(--text-2); }
 .dialog__text p { margin: 0 0 24px; color: var(--text-2); }
 .dialog__text p:last-child { margin-bottom: 0; }
 /* Gallery — rows of one wide shot or two 4:3 shots side by side */
@@ -540,10 +553,13 @@ svg { display: block; flex: none; }
 .dialog__caption { max-width: 640px; margin: 8px auto 16px; color: var(--text-2); }
 .dialog__caption b { color: var(--text); font-weight: 500; }
 .dialog__nav { display: flex; justify-content: space-between; gap: 20px; padding: 0 20px 20px; }
-.dialog__nav a { flex: 1; padding: 16px 20px; border-radius: 20px; background: var(--bg); transition: background-color var(--duration-quick) ease-out; }
+.dialog__nav a { flex: 1; display: flex; align-items: center; gap: 14px; padding: 16px 20px; border-radius: 20px; background: var(--bg); transition: background-color var(--duration-quick) ease-out; }
 .dialog__nav a:hover { background: var(--surface-muted); }
-.dialog__nav a:last-child { text-align: right; }
-.dialog__nav svg { display: none; }
+.dialog__nav a:last-child { justify-content: flex-end; text-align: right; }
+.dialog__nav a > svg { display: none; }
+.dialog__nav-ava { flex: none; width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; background: var(--surface-muted); color: var(--text-2); transition: transform var(--duration-fast) var(--ease-bounce); }
+.dialog__nav-ava svg { width: 18px; height: 18px; }
+@media (hover: hover) { .dialog__nav a:first-child:hover .dialog__nav-ava { transform: rotate(-3deg); } .dialog__nav a:last-child:hover .dialog__nav-ava { transform: rotate(3deg); } }
 .dialog__nav small { display: block; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--text-3); font-weight: 500; }
 body.is-locked { overflow: hidden; }
 
@@ -618,6 +634,8 @@ body.is-locked { overflow: hidden; }
   .dialog__grab { display: block; position: absolute; top: 8px; left: 50%; width: 36px; height: 5px; margin-left: -18px; border-radius: 3px; background: rgba(0,0,0,.18); }
   .dialog__bar::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 64px; } /* swipe handle zone */
   .dialog__head { flex-wrap: wrap; }
+  .dialog__facts { grid-template-columns: 1fr 1fr; }
+  .dialog__lead { font-size: 17px; }
   .dialog__open { order: 3; margin-left: 0; width: 100%; height: 40px; }
   .dialog__open span { flex: 1; text-align: center; }
   .dialog__open svg { height: 40px; }
@@ -633,7 +651,9 @@ body.is-locked { overflow: hidden; }
   .dialog__nav a { height: 36px; padding: 0 12px; border-radius: 12px; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; background: var(--surface-muted); }
   .dialog__nav a:last-child { justify-content: flex-end; }
   .dialog__nav small { display: none; }
-  .dialog__nav svg { display: block; color: var(--text-3); }
+  .dialog__nav a > svg { display: block; color: var(--text-3); }
+  .dialog__nav-ava { width: 22px; height: 22px; border-radius: 6px; }
+  .dialog__nav-ava svg { width: 14px; height: 14px; }
   .dialog__gallery { padding-bottom: 16px; }
 
   /* Sticky segmented control — becomes a translucent, blurred bar once stuck */
@@ -906,70 +926,85 @@ body.is-locked { overflow: hidden; }
    A shot is "<1080|1440>/<file>" inside assets/cases/<dir>/ — 1080 → 16:9, 1440 → 4:3.
    Pairs are meant for 4:3 shots: light/dark versions, mobile screens, before/after.
    Videos: "<name>.video" → <name>.webm + .mp4 fallback, "<name>.webm" → WebM only; poster is <name>.webp.
-   They autoplay muted while in view. */
+   They autoplay muted while in view.
+   Overview (top of the case): summary — one line on what the product is and for whom; facts — [label, value];
+   results — optional [big number, label]; tags — my scope; sections — [label, text]. */
 const CASES = {
   inview: {
     logo: "assets/inved.png", company: "inved", name: "Inview", meta: "Product designer · 2024–now",
-    tags: ["Product design", "Design system", "MVP", "PropTech", "Back office", "Front office"],
-    text: [
-      "Inview is a real-estate analysis platform by inved.sa. Investors use it to source properties, compare them with the market and decide which deals are worth their time — from the first listing to the last document.",
-      "The challenge: a lot of dense data — prices, yields, comparables, off-market listings — that had to feel calm and easy to scan, plus a credit-based model that is clear before anyone spends a credit.",
-      "My role: product design end to end — research, flows, UI and the design system shared with Inview Circle."
+    summary: "Real-estate analytics platform that helps investors find, compare and evaluate properties — from the first listing to the last document.",
+    facts: [["Industry", "PropTech"], ["Audience", "B2C · Investors"], ["Platform", "Web"], ["Stage", "Live MVP"]],
+    tags: ["Product design", "Design system", "Back office", "Front office"],
+    sections: [
+      ["Problem", "Investors work with dense data — prices, yields, comparables, off-market listings — spread across many sources."],
+      ["Solution", "One workspace for sourcing, analysis and administration: calm, scannable listings, comparison with the market and clear credit costs at every paid action."],
+      ["My role", "Product design end to end — research, user flows, UI and the design system shared with Inview Circle."]
     ],
     dir: "inview",
     gallery: [["1080/01"], ["1080/sourcing-desktop.video"], ["1440/sourcing-mobile.video", "1440/03"], ["1080/analyze.video"], ["1440/04", "1440/05"], ["1080/administration.video"], ["1080/07"]]
   },
   "inview-circle": {
     logo: "assets/inved.png", company: "inved", name: "Inview Circle", meta: "Product designer · 2024–now",
-    tags: ["Product design", "Design system", "MVP", "PropTech", "Back office", "Front office"],
-    text: [
-      "Inview Circle is a platform for co-investing in real estate. A project owner brings a property, investors join with their share, and everyone follows the same project — interests, investors, renovation works and finances — in one place.",
-      "The challenge: shared money needs shared clarity. Every investor should see where the project stands, what has been spent and what comes next, without having to call the owner.",
-      "My role: product design from the first concept — project workspace, renovation planning with contractors, investor views and sharing."
+    summary: "Co-investment platform for real estate: a project owner brings a property, investors join with their share and follow the project together.",
+    facts: [["Industry", "PropTech"], ["Audience", "B2B · B2C"], ["Platform", "Web"], ["Stage", "Live MVP"]],
+    tags: ["Product design", "Design system", "Back office", "Front office"],
+    sections: [
+      ["Problem", "Shared money needs shared clarity. Investors had to call the owner to learn where the project stands, what has been spent and what comes next."],
+      ["Solution", "One project workspace — interests, investors, renovation works with contractors and finances — with separate views for owners and investors, and easy sharing."],
+      ["Back office", "Our managers and consultants run every key process right in the app — from communication with investors to updates on renovation works — so nothing gets lost in calls and chats."],
+      ["My role", "Product design from the first concept, on the design system shared with Inview."]
     ],
     dir: "inview-circle",
     gallery: [["1080/01"], ["1440/02", "1440/03"], ["1440/map.video"], ["1080/04"], ["1440/05", "1440/06"]]
   },
   emg: {
     logo: "assets/emg.png", company: "emg", name: "Panora", meta: "Product designer · 2024–2026",
-    tags: ["Product design", "Mobile app", "MVP", "Design system", "InsurTech"],
-    text: [
-      "Panora is a B2C service by emg.sa for keeping all your personal insurance in one place: contracts, monthly payments and documents, with an AI chat that explains what you’re actually covered for.",
-      "The challenge: most people don’t know what their policies cover or how much they pay in total. Panora turns a drawer full of contracts into a clear picture — what goes out each month, what’s due next and which common coverages are still missing.",
-      "My role: product design for web and mobile, the design system shared with Capita, and UX copy in French."
+    summary: "Consumer app that keeps the insurance of your whole family in one place — contracts, payments and documents, with an AI chat that explains what you’re covered for.",
+    facts: [["Industry", "InsurTech"], ["Audience", "B2C"], ["Platform", "Web · Mobile"], ["Stage", "Live · Early stage"]],
+    tags: ["Product design", "Mobile app", "Design system"],
+    sections: [
+      ["Problem", "Most people don’t know what their policies cover or how much they pay in total — the contracts just sit in a drawer, and every family member’s policies live in a different one."],
+      ["Solution", "Every family member’s insurance managed in one app: a clear picture of what goes out each month and what’s due next, tips on how to cut costs and switch to better-value coverage, and an AI chat that answers questions in plain language."],
+      ["My role", "Product design for web and mobile, and the design system behind it."]
     ],
     dir: "panora",
     gallery: [["1080/01"], ["1440/03-2", "1440/03-3"], ["1080/02"], ["1440/add-contract.webm"], ["1440/03", "1440/06"], ["1080/04"], ["1440/05"]]
   },
   capita: {
     logo: "assets/emg.png", company: "emg", name: "Capita", meta: "Product designer · 2024–2026",
-    tags: ["Product design", "MVP", "Design system", "InsurTech"],
-    text: [
-      "Capita is a B2B service by emg.sa that helps companies store and manage their insurance: every contract, document and claim in one dashboard, with a personal broker one click away.",
-      "The challenge: company insurance is scattered across insurers, PDFs and email threads. The goal was a single view of spend and coverage — by employees, vehicles and real estate — that a finance manager can read in a minute.",
-      "My role: product design, light and dark themes, built on the same design system as Panora."
+    summary: "Dashboard that helps companies store and manage their insurance — every contract, document and claim, with a personal broker one click away.",
+    facts: [["Industry", "InsurTech"], ["Audience", "B2B · Companies"], ["Platform", "Web"], ["Stage", "In development"]],
+    tags: ["Product design", "Design system"],
+    sections: [
+      ["Problem", "Company insurance is scattered across insurers, PDFs and email threads, so nobody sees the total spend and coverage."],
+      ["Solution", "A single view of spend and coverage — by employees, vehicles and real estate — that a finance manager can read in a minute."],
+      ["My role", "The full cycle — from competitor analysis to the final prototypes."],
+      ["What I’d do differently", "We gave Capita the same fresh, modern UI as our consumer app Panora and expected a similar boost. In B2B it didn’t pay off: our clients cared about numbers and automation far more than visuals, and the polish took development budget that could have gone elsewhere. Looking back, I’d push for deeper customisation for each client’s workflow instead — a lesson I now bring to every B2B project."]
     ],
     dir: "capita",
     gallery: [["1080/01"], ["1440/02", "1440/03"], ["1440/04", "1440/04-dark"], ["1080/01-dark"]]
   },
   prodrec: {
     logo: "assets/prodrec.png", name: "prod.rec", meta: "Founder & designer · 2026",
-    tags: ["UX research", "Product design", "Design engineering"],
     url: "https://illiatverdun.github.io/prodrec/mvp/",
-    text: [
-      "prod.rec is a time-tracking and invoicing tool I designed and built for myself — and for freelancers who juggle several clients at once.",
-      "The problem: hours lived in one app, invoices in another, and every month ended with an hour of copy-pasting. The goal was simple — logging time takes one click, turning it into an invoice takes one more.",
-      "My role: everything — product, UX/UI, design system and React front-end. Below are the key decisions, each with a short note on why."
+    summary: "Time tracking and invoicing in one tool, for freelancers who juggle several clients. I designed and built it — first of all for myself.",
+    facts: [["Industry", "Productivity"], ["Audience", "Freelancers"], ["Platform", "Web"], ["Stage", "Live MVP"]],
+    tags: ["UX research", "Product design", "Design engineering"],
+    sections: [
+      ["Problem", "Hours lived in one app, invoices in another, and every month ended with an hour of copy-pasting."],
+      ["Solution", "Timer and invoice in one flow: logging time takes one click, turning tracked hours into an invoice takes one more."],
+      ["My role", "Everything — product, UX/UI, design system and the React front-end."]
     ],
     dir: "prodrec",
     gallery: [["1080/01"], ["1440/02", "1440/03"]]
   },
   archive: {
     logo: null, icon: "archive", name: "Archive", meta: "2018–2024",
+    summary: "A selection from my freelance and part-time projects, internal tools we built for use inside the company, and further iterations of products that had already shipped.",
+    facts: [["Period", "2018–2024"], ["Work", "Freelance · Part-time"], ["Also", "Internal tools, iterations"], ["Formats", "Dashboards, apps, sites"]],
     tags: ["Product design", "Freelance"],
-    text: [
-      "Everything I designed before the cases above, starting from 2018 — product work for startups, agency projects and freelance clients, including sereda.ai.",
-      "Smaller in scope, but it’s where most of my craft took shape: dashboards, mobile apps, landing pages and plenty of experiments."
+    sections: [
+      ["Why it’s here", "Smaller in scope, but it’s where most of my craft took shape: dashboards, mobile apps, landing pages and plenty of experiments."]
     ],
     dir: "others",
     gallery: [["1080/01"], ["1440/02", "1440/03"], ["1080/04"], ["1440/05", "1440/07"], ["1080/06"]]
@@ -1318,6 +1353,10 @@ const caseScroller = () => phoneMQ.matches ? modal : wrap;
 const modal = document.getElementById("caseModal");
 let modalOpen = false, lastFocus = null;
 
+/* Small case avatar for the prev / next buttons */
+const navAvatar = c => c.logo ? `<img class="dialog__nav-ava" src="${c.logo}" alt="">`
+  : `<span class="dialog__nav-ava" aria-hidden="true">${c.icon ? ICONS[c.icon] : c.name[0]}</span>`;
+
 function caseHTML(key) {
   const c = CASES[key];
   const idx = CASE_ORDER.indexOf(key);
@@ -1351,13 +1390,16 @@ function caseHTML(key) {
         <div><h2 class="dialog__name" id="caseName">${c.name}</h2><p class="dialog__meta">${c.meta}</p></div>
         ${open}
       </div>
-      ${c.tags ? `<div class="dialog__tags t-stagger-line" style="--i:1">${c.tags.map(t => `<span>${t}</span>`).join("")}</div>` : ""}
-      <div class="dialog__text">${c.text.map((t, i) => `<p class="t-stagger-line" style="--i:${i + 2}">${t}</p>`).join("")}</div>
+      <p class="dialog__lead t-stagger-line" style="--i:1">${c.summary}</p>
+      <dl class="dialog__facts t-stagger-line" style="--i:2">${c.facts.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
+      ${c.results ? `<div class="dialog__results t-stagger-line" style="--i:3">${c.results.map(([v, k]) => `<div><b>${v}</b><span>${k}</span></div>`).join("")}</div>` : ""}
+      ${c.tags ? `<div class="dialog__tags t-stagger-line" style="--i:4">${c.tags.map(t => `<span>${t}</span>`).join("")}</div>` : ""}
+      ${c.sections.map(([k, t], i) => `<section class="dialog__section t-stagger-line" style="--i:${i + 5}"><h3 class="dialog__label">${k}</h3><p>${t}</p></section>`).join("")}
     </div>
     ${gallery ? `<div class="dialog__gallery">${gallery}</div>` : ""}
     <nav class="dialog__nav" aria-label="More work">
-      <a href="#case-${prevKey}" aria-label="Previous case: ${prev.name}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5L5.5 8l4.5 4.5"/></svg><small>Previous</small>${prev.name}</a>
-      <a href="#case-${nextKey}" aria-label="Next case: ${next.name}"><small>Next</small>${next.name}<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5L10.5 8 6 12.5"/></svg></a>
+      <a href="#case-${prevKey}" aria-label="Previous case: ${prev.name}"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3.5L5.5 8l4.5 4.5"/></svg>${navAvatar(prev)}<span><small>Previous</small>${prev.name}</span></a>
+      <a href="#case-${nextKey}" aria-label="Next case: ${next.name}"><span><small>Next</small>${next.name}</span>${navAvatar(next)}<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5L10.5 8 6 12.5"/></svg></a>
     </nav>`;
 }
 
